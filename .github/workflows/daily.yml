@@ -1,0 +1,96 @@
+name: 每日更新（06:00 海外盤 / 16:00 收盤）
+
+on:
+  schedule:
+    # GitHub Actions 的 cron 一律使用 UTC，台北時間 = UTC + 8
+    # 早上 06:00：美股已收盤，更新海外盤結論與排名依據（台股行情仍是前一交易日）
+    - cron: "0 22 * * 0-4"    # 台北 06:00（週一～週五）
+    # 下午 16:00：台股收盤後，更新當日收盤數據
+    - cron: "0 8 * * 1-5"     # 台北 16:00
+  workflow_dispatch:           # 允許手動點按鈕立刻執行
+
+# 讓 workflow 有權限寫回 repo 並發布 GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# 同時只跑一個，避免兩個排程撞在一起互相覆蓋
+concurrency:
+  group: build-dashboard
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45   # 首次要補跑回測，時間放寬
+    steps:
+      - name: 取得原始碼
+        uses: actions/checkout@v4
+
+      - name: 安裝 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: 安裝套件
+        run: pip install -r requirements.txt
+
+      # 還原 data/history 的 CSV 快取，避免每次都重抓 14 個月
+      # key 每天換一次，restore-keys 讓它接續前一天的快取往下增量更新
+      - name: 還原歷史資料快取
+        uses: actions/cache@v4
+        with:
+          path: data/history
+          key: tw-history-${{ github.run_id }}
+          restore-keys: |
+            tw-history-
+
+      # 第一次部署（或回測檔遺失）時先補跑一次回測，
+      # 否則要等到週日排程才會有勝率，頁面會一直顯示「樣本不足」。
+      - name: 首次補跑回測（僅在 data/backtest.json 不存在時）
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: |
+          if [ ! -f data/backtest.json ]; then
+            echo "找不到 data/backtest.json，先補跑一次回測（約 10～20 分鐘）"
+            python scripts/backtest.py --days 180 || echo "回測失敗，本次先以技術分數排名"
+          else
+            echo "已有 data/backtest.json，略過"
+          fi
+
+      - name: 產生儀表板
+        env:
+          # 選用：設了 FINMIND_TOKEN 會用你的額度，沒設就用免費額度（速度較慢）
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: python scripts/build.py
+
+      - name: 提交更新結果
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html data/ || true
+          # 沒有變動（例如休市日）就不要建立空 commit
+          if git diff --staged --quiet; then
+            echo "沒有變動，略過 commit"
+          else
+            git commit -m "更新儀表板 $(TZ=Asia/Taipei date '+%Y-%m-%d %H:%M')"
+            git push
+          fi
+
+      - name: 打包網站檔案
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 發布到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

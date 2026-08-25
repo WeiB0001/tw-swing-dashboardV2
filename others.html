@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0E1116">
+<meta name="description" content="其他產業：非科技金融 ETF 的產業中，技術面表現亮眼的標的。">
+<title>其他產業 · 台股 Swing</title>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="其他產業">
+<link rel="stylesheet" href="journal.css">
+<style>
+.rd-search{
+  display:flex;align-items:center;gap:8px;background:var(--panel-2);
+  border:1px solid #2E3846;border-radius:10px;padding:9px 12px;margin-bottom:10px;
+}
+.rd-search:focus-within{border-color:var(--signal)}
+.rd-search input{
+  flex:1 1 auto;min-width:0;background:none;border:0;color:var(--text);
+  font:inherit;font-size:15px;outline:none;
+}
+.rd-search span{font-size:14px;color:var(--muted)}
+.rd-row-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.rd-row-filters .lbl{font-size:12px;color:var(--muted);font-weight:700;align-self:center;margin-right:2px}
+.rd-btn{
+  font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:999px;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;white-space:nowrap;
+}
+.rd-btn[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#161105}
+.rd-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.rd-count{font-size:12.5px;color:var(--muted);margin:9px 0 4px;line-height:1.6}
+.rd-count b{color:#B9C4D0}
+.rd-tag{
+  display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
+  margin:0 5px 0 0;background:#1E2530;border:1px solid #2E3846;color:#93A1B1;
+}
+.rd-tag.hot{background:#2A1A12;border-color:#4A2E1B;color:#FFC98A}
+.rd-tag.up{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.rd-tag.low{background:#12212B;border-color:#1E3A4A;color:#7FD1E8}
+.rd-tag.core{background:#241C0D;border-color:#4A3A18;color:#F2C14E}
+.rd-more{width:100%;margin-top:10px;padding:11px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="disclaimer-top">⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險</div>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="./">首頁</a>
+    <a href="radar.html">雷達</a>
+    <a href="momentum.html">明日強勢</a>
+    <a href="portfolio.html">我的交易</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">OTHER SECTORS</div>
+    <h1 class="title">其他產業亮眼 <span id="rd-total">--</span> 檔</h1>
+    <div class="jn-warn" id="rd-stats">
+      首頁只掃科技電子、金融與 ETF。這一頁補上<b>其他產業</b>——食品、航運、生技、傳產、營建等，
+      用<b>同一套技術分數</b>排名，但只列出達標的標的，不會混進首頁排行。
+      這裡沒有歷史勝率分層，只有技術面分數，參考價值比首頁低一階。
+    </div>
+  </header>
+
+  <div class="jn">
+    <div class="rd-search">
+      <span>🔍</span>
+      <input id="rd-q" type="search" placeholder="搜尋代號、名稱或產業（例如 長榮、航運）"
+             autocomplete="off" enterkeyhint="search">
+    </div>
+
+    <div class="rd-row-filters" role="group" aria-label="排序">
+      <span class="lbl">排序</span>
+      <button type="button" class="rd-btn" data-sort="score" aria-pressed="true">技術分數</button>
+      <button type="button" class="rd-btn" data-sort="chg" aria-pressed="false">今日漲幅</button>
+      <button type="button" class="rd-btn" data-sort="vol" aria-pressed="false">量能倍數</button>
+    </div>
+
+    <div class="rd-count" id="rd-count"></div>
+    <div id="rd-list"></div>
+    <button type="button" class="btn-j rd-more" id="rd-more" hidden>顯示更多</button>
+  </div>
+
+  <div class="disclaimer-bottom">
+    ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
+    這一頁只有技術分數，沒有經過首頁的歷史勝率統計。<br>
+    分數高不代表會漲，這些產業的股價常受原物料、匯率、政策等基本面因素主導。
+  </div>
+
+  <footer>
+    其他產業 · 非科技金融 ETF 的技術面排行<br>
+    <a href="./">回排行榜首頁</a> · <a href="alerts.html">盤中提醒</a> · <a href="others.html">其他產業</a>
+  </footer>
+</div>
+
+<script>
+if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+  navigator.serviceWorker.register("./sw.js").catch(function () {});
+}
+</script>
+<script src="others.js" defer></script>
+
+</body>
+</html>

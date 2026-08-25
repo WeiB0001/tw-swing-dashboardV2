@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0E1116">
+<meta name="description" content="台股短線價差機會掃描：每日收盤後自動更新，僅供技術分析參考。">
+<title>台股{{ "勝率" if meta.has_winrate else "機會" }}排行 · {{ meta.trade_date }}</title>
+
+<!-- ===== PWA：讓這頁可以「加到主畫面」，開起來像一個 app ===== -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="價差機會">
+<style>
+/* =======================================================================
+   設計 tokens — 想換配色只要改這裡
+   紅漲綠跌採台股慣例（與美股相反）
+   ======================================================================= */
+:root{
+  --ink:#0E1116;        /* 底色 */
+  --panel:#161B22;      /* 卡片 */
+  --panel-2:#1C232C;    /* 卡片內層 */
+  --line:#242C36;       /* 分隔線 */
+  --text:#E7ECF2;
+  --muted:#828F9E;
+  --up:#FF4D5A;         /* 漲 */
+  --down:#12B886;       /* 跌 */
+  --signal:#FFB020;     /* 訊號強度 */
+  --signal-dim:#8A5F13;
+  --warn:#F2C14E;
+  --radius:14px;
+  --gap:12px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ink);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei","Helvetica Neue",sans-serif;
+  font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(24px + var(--safe-b));
+}
+.mono{font-family:ui-monospace,"SF Mono","JetBrains Mono","Roboto Mono",Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:680px;margin:0 auto;padding:0 14px}
+.up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--muted)}
+
+/* ---------- 免責聲明（頂部固定） ---------- */
+.disclaimer-top{
+  position:sticky;top:0;z-index:50;
+  background:#2A1A12;border-bottom:1px solid #4A2E1B;
+  color:#FFC98A;font-size:13px;font-weight:600;
+  padding:calc(9px + env(safe-area-inset-top,0px)) 14px 9px;
+  text-align:center;letter-spacing:.02em;
+}
+
+/* ---------- 狀態提示（離線／有新資料），平常不占空間 ---------- */
+.toast{
+  display:none;position:sticky;z-index:49;
+  top:calc(37px + env(safe-area-inset-top,0px));
+  padding:9px 14px;font-size:13px;font-weight:600;
+  text-align:center;border-bottom:1px solid transparent;
+}
+.toast.show{display:block}
+.toast.offline{background:#1E2530;border-bottom-color:#2E3846;color:#9FACBA}
+.toast.update{background:#12212B;border-bottom-color:#1E3A4A;color:#7FD1E8;cursor:pointer}
+.toast button{
+  background:none;border:1px solid currentColor;color:inherit;
+  font:inherit;font-size:12px;padding:2px 9px;border-radius:999px;margin-left:8px;cursor:pointer;
+}
+
+/* ---------- 合併控制面板：預算 + 每張 + 產業 ---------- */
+.panel{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 14px;margin:12px 0 14px;
+}
+.panel-row{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.panel-row:last-of-type{margin-bottom:0}
+.panel-row.wrap{flex-wrap:wrap}
+.panel-row.scroll{
+  overflow-x:auto;margin-left:-14px;margin-right:-14px;padding:0 14px 2px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.panel-row.scroll::-webkit-scrollbar{display:none}
+.panel-row label,.panel-row .lbl{
+  flex:0 0 auto;font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap;
+}
+.panel-row label{font-size:13.5px;font-weight:800;color:var(--text)}
+.sep{flex:0 0 1px;height:18px;background:var(--line);margin:0 3px}
+
+.budget-input{
+  flex:1 1 130px;display:flex;align-items:center;gap:6px;
+  background:var(--panel-2);border:1px solid #2E3846;border-radius:10px;padding:7px 10px;
+}
+.budget-input:focus-within{border-color:var(--signal)}
+.budget-input span{font-size:12.5px;color:var(--muted);font-weight:700}
+.budget-input input{
+  flex:1 1 auto;min-width:0;background:none;border:0;color:var(--text);
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:17px;font-weight:700;
+  font-variant-numeric:tabular-nums;outline:none;-moz-appearance:textfield;
+}
+.budget-input input::placeholder{font-family:inherit;font-size:12.5px;font-weight:600}
+.budget-input input::-webkit-outer-spin-button,
+.budget-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.budget-input button{background:none;border:0;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
+
+.preset,.split,.mode-btn,.type-btn{
+  flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;
+  padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
+}
+.split{padding:6px 11px;min-width:34px;text-align:center}
+.split[aria-pressed="true"],.mode-btn[aria-pressed="true"],.type-btn[aria-pressed="true"]{
+  background:var(--signal);border-color:var(--signal);color:#161105;
+}
+.preset:active{background:#2A333F}
+.preset:focus-visible,.split:focus-visible,.mode-btn:focus-visible,
+.type-btn:focus-visible,.pick:focus-visible,.budget-input input:focus-visible{
+  outline:2px solid var(--signal);outline-offset:2px}
+.ghost-btn{
+  flex:0 0 auto;font:inherit;font-size:12px;font-weight:600;padding:5px 10px;
+  border-radius:999px;background:none;border:1px solid #3A4552;color:var(--muted);cursor:pointer;
+}
+#pick-count{margin-left:4px;font-size:11px;opacity:.85}
+.panel-row .lbl.dim{opacity:.35}
+
+/* 選入按鈕 + 配置金額 */
+.pickrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.pick{
+  flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;
+  padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
+}
+.pick[aria-pressed="true"]{
+  background:#1B3A2A;border-color:#2E6B4A;color:#6EE7A8;
+}
+
+.budget-result{
+  display:none;margin:0 0 9px;padding:10px 12px;border-radius:10px;
+  background:#12181F;border-left:3px solid var(--signal);
+  font-size:13px;color:#C3CEDA;line-height:1.65;
+}
+.budget-result.show{display:block}
+.budget-result b{color:var(--signal);font-weight:800}
+.band-note{margin-top:9px;font-size:12px;color:var(--muted);line-height:1.6}
+.budget-note{margin:8px 0 0;font-size:11.5px;color:#6E7A88;line-height:1.65}
+.budget-note b{color:#8E9AA8}
+
+/* 產業標籤 */
+.sector{
+  display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;
+  background:#16222B;border:1px solid #243542;color:#7FA8BE;
+  font-size:10.5px;font-weight:700;vertical-align:1px;
+}
+.weak{
+  display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;
+  background:#241C0D;border:1px solid #4A3A18;color:#C9A85C;
+  font-size:10.5px;font-weight:700;vertical-align:1px;
+}
+.more{
+  display:block;width:100%;font:inherit;font-size:13.5px;font-weight:700;
+  padding:12px;margin:2px 0 14px;border-radius:var(--radius);cursor:pointer;
+  background:var(--panel);border:1px solid var(--line);color:#AEBAC7;
+}
+.more:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+/* 一張成本 */
+.lot{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:2px}
+/* 配置金額 */
+.alloc{
+  flex:1 1 200px;padding:8px 11px;border-radius:9px;
+  background:#1B2733;border:1px solid #2A3A4A;
+  font-size:13px;color:#9FD6EA;font-weight:700;
+}
+.alloc b{color:#CFEAF5;font-family:ui-monospace,Menlo,monospace}
+.alloc .sub{color:#6F8494;font-weight:600;font-size:11.5px}
+.alloc .pnl-line{
+  display:flex;flex-wrap:wrap;gap:2px 14px;
+  margin-top:5px;padding-top:5px;border-top:1px solid #263543;
+  font-size:12px;font-weight:600;color:#7E8B9A;
+}
+.alloc .pnl-line i{font-style:normal;white-space:nowrap}
+.alloc .pnl-line b{font-family:ui-monospace,Menlo,monospace;font-weight:700}
+
+/* ---------- 大盤 ---------- */
+header{padding:20px 0 14px}
+.eyebrow{
+  font-size:12px;letter-spacing:.18em;color:var(--muted);
+  text-transform:uppercase;font-weight:700;margin-bottom:6px;
+}
+.title{font-size:22px;font-weight:800;letter-spacing:-.01em;margin:0 0 14px}
+.market{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;
+}
+.market-label{font-size:13px;color:var(--muted);margin-bottom:2px}
+.market-close{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.market-chg{font-size:15px;font-weight:700;text-align:right}
+.market-meta{font-size:12px;color:var(--muted);margin-top:4px;text-align:right}
+.demo-flag{
+  margin-top:10px;padding:9px 12px;border-radius:10px;
+  background:#12212B;border:1px solid #1E3A4A;color:#7FD1E8;
+  font-size:12.5px;font-weight:600;line-height:1.5;
+}
+.stamp{
+  display:flex;flex-wrap:wrap;gap:6px 14px;
+  font-size:12.5px;color:var(--muted);margin-top:10px;
+}
+.stamp b{color:#B9C4D0;font-weight:600}
+.btn-refresh{
+  font:inherit;font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;
+}
+.btn-refresh:disabled{opacity:.6;cursor:default}
+.card.live-px .px .close::after{
+  content:"·新";font-size:9.5px;color:#6EE7A8;font-weight:700;
+  margin-left:3px;vertical-align:2px;
+}
+.btn-refresh:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.refresh-msg{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+.refresh-msg.new{color:#6EE7A8}
+
+/* ---------- 區段標題 ---------- */
+.section-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin:26px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line);
+}
+.section-head h2{font-size:16px;font-weight:800;margin:0;letter-spacing:.01em}
+.section-head span{font-size:12px;color:var(--muted)}
+
+/* ---------- 排名卡片 ---------- */
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:var(--gap);overflow:hidden;
+}
+.card>summary{list-style:none;cursor:pointer;padding:14px 14px 12px;display:block}
+.card>summary::-webkit-details-marker{display:none}
+.card>summary:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+
+.row1{display:flex;align-items:center;gap:10px}
+.rank{
+  flex:0 0 26px;font-size:15px;font-weight:800;color:var(--muted);
+  text-align:right;letter-spacing:-.02em;
+}
+.rank.top{color:var(--signal)}
+.ident{flex:1 1 auto;min-width:0}
+.code{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.name{font-size:18px;font-weight:700;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.px{text-align:right;flex:0 0 auto}
+.px .close{font-size:19px;font-weight:700}
+.px .chg{font-size:13.5px;font-weight:700}
+
+/* 機會分數能量條 — 每一段就是分數的來源 */
+.meter{display:flex;gap:3px;margin:12px 0 5px;height:8px}
+.seg{background:#222932;border-radius:3px;overflow:hidden;position:relative}
+.seg i{display:block;height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--signal-dim),var(--signal))}
+.meter-labels{display:flex;gap:3px;font-size:10.5px;color:#5F6B78;letter-spacing:.04em}
+.meter-labels span{text-align:center}
+
+.row3{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.headline{font-size:14px;color:#AEBAC7;flex:1 1 auto;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{flex:0 0 auto;font-size:22px;font-weight:800;color:var(--signal);
+  letter-spacing:-.02em;line-height:1;text-align:right}
+.score em{display:block;font-size:9.5px;font-style:normal;color:var(--muted);
+  font-weight:700;letter-spacing:.04em;margin-top:2px}
+.score .pct{font-size:13px;font-weight:700;margin-left:1px}
+.score.nodata{color:#6E7A88}
+.wr.nodata{color:#6E7A88}
+
+/* ---------- 美股連動 ---------- */
+.us{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 14px;margin-top:10px;
+}
+.us h3{
+  margin:0 0 9px;font-size:12px;font-weight:800;color:var(--muted);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.us-grid{display:flex;flex-wrap:wrap;gap:5px 16px;font-size:13px}
+.us-grid div{display:flex;gap:6px;align-items:baseline}
+.us-grid span{color:var(--muted);font-size:12px}
+.us-grid b{font-weight:700;font-family:ui-monospace,Menlo,monospace}
+.us-sub{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
+.us-fc{
+  margin-top:10px;padding:10px 12px;border-radius:10px;
+  background:#12181F;border-left:3px solid #7FD1E8;font-size:13px;line-height:1.65;color:#C3CEDA;
+}
+.us-fc b{color:#7FD1E8;font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.us-note{margin:7px 0 0;font-size:11.5px;color:#6E7A88;line-height:1.6}
+
+/* 型態標籤 / 星等 / 預期空間 */
+.kind{
+  display:inline-block;margin-left:8px;padding:1px 7px;border-radius:999px;
+  background:#1E2530;border:1px solid #2E3846;color:#93A1B1;
+  font-size:10.5px;font-weight:700;letter-spacing:.02em;vertical-align:1px;
+}
+.stars{display:flex;flex-wrap:wrap;gap:4px 14px;margin:11px 0 0;padding:0;font-size:12px}
+.stars div{display:flex;gap:5px;align-items:baseline}
+.stars dt{color:var(--muted);margin:0}
+.stars dd{margin:0;color:var(--signal);letter-spacing:-.5px;font-size:11.5px}
+.stars .risk-star dd{color:#FF7A5C}
+.final{
+  display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:9px;
+  padding:7px 10px;border-radius:9px;background:#12181F;border-left:3px solid var(--signal);
+  font-size:12px;color:var(--muted);
+}
+.final b{color:var(--signal);font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.final .fill{color:#F2C14E;flex-basis:100%}
+.mtier{
+  display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;
+  font-size:10.5px;font-weight:700;vertical-align:1px;
+  background:#1E2530;border:1px solid #2E3846;color:#93A1B1;
+}
+.mtier.m0{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.mtier.m1{background:#2A2412;border-color:#544720;color:#F2C14E}
+.mtier.m2{background:#2A1418;border-color:#5A2530;color:#FF8A96}
+.mom{margin:0 0 13px;padding:10px 12px;border-radius:10px;background:#12181F;border-left:3px solid #3A4552}
+.mom0{border-left-color:#2E9E6B}.mom1{border-left-color:#8A7430}.mom2{border-left-color:#8A3A3A}
+.mom-head{font-size:13.5px;font-weight:800;color:var(--text)}
+.mom-head b{float:right;font-family:ui-monospace,Menlo,monospace;color:var(--signal)}
+.mom-list{font-size:12px;line-height:1.7;margin-top:6px;clear:both}
+.mom-list.ok{color:#8FD9B0}.mom-list.bad{color:#FF9E80}
+.mom-note{font-size:11px;color:#6E7A88;line-height:1.65;margin-top:7px}
+.final .sub{color:#5F6B78}
+.swing{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:9px;
+  font-size:12.5px;color:var(--muted)}
+.swing b{color:#B9C4D0;font-weight:700}
+.swing .wr b{color:#7FD1E8}
+.mainrisk{margin-top:5px;font-size:12.5px;color:#8E7B63;line-height:1.5}
+.chip{
+  display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;
+  border-radius:999px;border:1px solid #4A3A18;color:var(--warn);background:#241C0D;
+  margin:8px 6px 0 0;
+}
+
+/* ---------- 大盤狀態 / 生命週期 / 計畫 / 組合 ---------- */
+.regime{
+  display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;
+  font-size:12px;font-weight:700;vertical-align:3px;
+  background:#1E2530;border:1px solid #2E3846;color:#B9C4D0;
+}
+.regime.bull{background:#122A1E;border-color:#1E5138;color:#6EE7A8}
+.regime.bear{background:#2A1418;border-color:#5A2530;color:#FF8A96}
+.regime.side{background:#2A2412;border-color:#544720;color:#F2C14E}
+.mark{
+  display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;
+  background:#16222B;border:1px solid #243542;color:#9FD6EA;
+  font-size:10.5px;font-weight:700;vertical-align:1px;
+}
+.wr .conf{color:var(--signal);letter-spacing:-1px;margin-left:4px}
+.lamp{font-size:14px;font-weight:800}
+.lamp.bull{color:#6EE7A8}.lamp.bear{color:#FF8A96}.lamp.side{color:#F2C14E}
+.us-fine{margin-top:5px;font-size:11.5px;color:#7E8B9A}
+
+.plan{margin:0 0 13px;padding:11px 13px;border-radius:10px;background:#12181F;border-left:3px solid #3A4552}
+.plan-go{border-left-color:#2E9E6B}
+.plan-wait{border-left-color:#8A7430}
+.plan-no{border-left-color:#8A3A3A}
+.plan-head{font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:3px}
+.plan-head b{color:var(--text);font-size:13.5px}
+.plan-note{font-size:11.5px;color:#6E7A88;line-height:1.6;margin-top:6px}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px 10px;margin-top:9px}
+.plan-grid div{display:flex;flex-direction:column;gap:1px}
+.plan-grid span{font-size:10.5px;color:var(--muted)}
+.plan-grid b{font-size:14px;font-weight:700}
+
+/* 進場判定：只回答「現在適不適合進場」，跟排名無關 */
+.entry{margin:9px 0 4px;padding:9px 11px;border-radius:9px;
+  background:#0F151C;border:1px solid #232C36}
+.entry-go{border-color:#1E5138}
+.entry-wait{border-color:#4A3A18}
+.entry-weak{border-color:#4A3A18}
+.entry-bad,.entry-no{border-color:#5A2530}
+.entry-st{font-size:14px;font-weight:800;color:var(--text)}
+.entry-go .entry-st{color:#6EE7A8}
+.entry-wait .entry-st{color:#F2C14E}
+.entry-bad .entry-st,.entry-no .entry-st{color:#FF8A96}
+.entry-note{font-size:11.5px;color:#6E7A88;line-height:1.65;margin-top:4px}
+.entry-facts{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:7px;font-size:12px;color:var(--muted)}
+.entry-facts b{color:#B9C4D0;font-family:ui-monospace,Menlo,monospace;font-weight:700}
+.entry-rr{margin-top:6px;font-size:12px;font-weight:700}
+.rr-good{color:#6EE7A8}.rr-fair{color:#F2C14E}.rr-poor{color:#FF8A96}.rr-na{color:#6E7A88}
+
+.pf{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px}
+.pf-top{display:flex;flex-wrap:wrap;gap:9px 18px}
+.pf-top div{display:flex;flex-direction:column;gap:1px}
+.pf-top span{font-size:11px;color:var(--muted)}
+.pf-top b{font-size:16px;font-weight:800}
+.pf-list{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:13px}
+.pf-list>b{font-size:12px;color:var(--muted);font-weight:700}
+.pf-row{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;margin-top:6px}
+.pf-row>.mono{color:var(--muted);font-size:12px}
+.pf-meta{font-size:11.5px;color:#6E7A88}
+.pf-note{margin:11px 0 0;font-size:11.5px;color:#6E7A88;line-height:1.65}
+.note.track b{color:var(--signal)}
+.note.wf{margin-top:12px;font-size:12.5px}
+.note.wf b{color:var(--text)}
+
+/* ---------- 搜尋框 ---------- */
+.find{
+  flex:1 1 auto;display:flex;align-items:center;gap:7px;min-width:0;
+  background:var(--panel-2);border:1px solid #2E3846;border-radius:10px;padding:8px 11px;
+}
+.find:focus-within{border-color:var(--signal)}
+.find span{font-size:13px;color:var(--muted)}
+.find input{
+  flex:1 1 auto;min-width:0;background:none;border:0;color:var(--text);
+  font:inherit;font-size:14.5px;outline:none;
+}
+.find button{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;padding:0 2px}
+
+/* ---------- 迷你價量圖 ---------- */
+.spark{margin:0 0 13px}
+.spark svg{width:100%;height:88px;display:block}
+.spark .px{fill:none;stroke:var(--signal);stroke-width:1.6}
+.spark .pxa{fill:rgba(255,176,32,.10)}
+.spark .vol rect{fill:#2C3742}
+.spark .vol rect.up{fill:#4A2A2E}
+.spark .ma{fill:none;stroke:#5A6673;stroke-width:1;stroke-dasharray:3 3}
+.spark-cap{font-size:11px;color:#6E7A88;margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
+
+/* ---------- 導覽列 ---------- */
+.nav{
+  display:flex;gap:7px;padding:12px 0 2px;
+  overflow-x:auto;margin:0 -14px;padding-left:14px;padding-right:14px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav a{
+  flex:0 0 auto;white-space:nowrap;
+  font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;
+  text-decoration:none;color:var(--muted);
+  background:var(--panel);border:1px solid var(--line);
+}
+.nav a.on{background:var(--signal);border-color:var(--signal);color:#161105}
+.nav a:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.jn-toast{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:130;
+  background:#1B3A2A;border:1px solid #2E6B4A;color:#6EE7A8;
+  padding:10px 16px;border-radius:999px;font-size:13px;font-weight:700;
+  box-shadow:0 6px 20px rgba(0,0,0,.45);
+}
+.jn-toast[hidden]{display:none}
+.jn-toast a{color:#B9F5D2}
+
+/* ---------- 我的交易記帳（沿用現有配色，不另立風格） ---------- */
+.jn-warn{
+  background:#12212B;border:1px solid #1E3A4A;border-radius:var(--radius);
+  padding:11px 13px;font-size:12.5px;color:#9FC4D4;line-height:1.7;margin-bottom:12px;
+}
+.jn-warn b{color:#7FD1E8}
+.jn{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px}
+.jn-bar{display:flex;flex-wrap:wrap;gap:7px}
+.btn-j{
+  flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;padding:7px 13px;
+  border-radius:999px;cursor:pointer;white-space:nowrap;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);
+}
+.btn-j.primary{background:var(--signal);border-color:var(--signal);color:#161105}
+.btn-j.danger{color:#FF8A96;border-color:#5A2530}
+.btn-j:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.jbuy{
+  flex:0 0 auto;font:inherit;font-size:12.5px;font-weight:700;padding:6px 12px;
+  border-radius:999px;cursor:pointer;white-space:nowrap;
+  background:var(--panel-2);border:1px solid #2E3846;color:#9FD6EA;
+}
+.jbuy.done{background:#1B3A2A;border-color:#2E6B4A;color:#6EE7A8}
+
+.jn-sum{display:flex;flex-wrap:wrap;gap:9px 18px;margin-top:12px}
+.jn-sum div{display:flex;flex-direction:column;gap:1px}
+.jn-sum span{font-size:11px;color:var(--muted)}
+.jn-sum b{font-size:16px;font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.jn-block{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.jn-block h3{margin:0 0 9px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.06em}
+.jn-empty{font-size:12.5px;color:#6E7A88;line-height:1.7}
+
+.jn-row{
+  background:var(--panel-2);border:1px solid #232C36;border-radius:10px;
+  padding:10px 12px;margin-bottom:8px;
+}
+.jn-r1{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.jn-r1 .c{font-size:12px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+.jn-r1 .n{font-size:15px;font-weight:700}
+.jn-r1 .pnl{margin-left:auto;font-size:15px;font-weight:800;font-family:ui-monospace,Menlo,monospace}
+.jn-r2{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:6px;font-size:12px;color:var(--muted)}
+.jn-r2 b{color:#B9C4D0;font-weight:600;font-family:ui-monospace,Menlo,monospace}
+.jn-ops{display:flex;gap:6px;margin-top:9px}
+.jn-ops button{
+  font:inherit;font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;
+  background:none;border:1px solid #3A4552;color:var(--muted);cursor:pointer;
+}
+.jn-ops .sell{color:var(--signal);border-color:#5A4718}
+.jn-tabs{display:flex;gap:6px;margin-bottom:9px}
+.jn-tab{
+  font:inherit;font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;
+  background:var(--panel-2);border:1px solid #2E3846;color:var(--muted);cursor:pointer;
+}
+.jn-tab[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#161105}
+.jn-note{font-size:11.5px;color:#6E7A88;margin-top:5px;line-height:1.6}
+
+/* 折線圖：原生 SVG，不引入圖表套件 */
+.jn-chart{width:100%;height:130px;display:block}
+.jn-chart .grid{stroke:#232C36;stroke-width:1}
+.jn-chart .line{fill:none;stroke:var(--signal);stroke-width:2;stroke-linejoin:round}
+.jn-chart .area{fill:rgba(255,176,32,.10)}
+.jn-chart .zero{stroke:#3A4552;stroke-width:1;stroke-dasharray:3 3}
+.jn-chart text{fill:#6E7A88;font-size:9px;font-family:ui-monospace,Menlo,monospace}
+
+/* 表單 */
+.jn-modal{
+  position:fixed;inset:0;z-index:120;background:rgba(6,9,13,.82);
+  display:flex;align-items:flex-end;justify-content:center;padding:0;
+}
+/* display:flex 會蓋過 hidden 屬性，沒有這行的話隱形遮罩會擋住整頁點擊 */
+.jn-modal[hidden]{display:none}
+.jn-dialog{
+  width:100%;max-width:520px;max-height:88vh;overflow-y:auto;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));
+}
+.jn-dialog h3{margin:0 0 12px;font-size:16px;font-weight:800}
+.jn-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.jn-field{display:flex;flex-direction:column;gap:4px}
+.jn-field.full{grid-column:1 / -1}
+.jn-field label{font-size:11.5px;color:var(--muted);font-weight:700}
+.jn-field input{
+  background:var(--panel-2);border:1px solid #2E3846;border-radius:9px;
+  padding:9px 10px;color:var(--text);font:inherit;font-size:15px;
+  font-family:ui-monospace,Menlo,monospace;outline:none;width:100%;
+}
+.jn-field input:focus{border-color:var(--signal)}
+.jn-actions{display:flex;gap:8px;margin-top:14px}
+.jn-actions .btn-j{flex:1 1 auto;text-align:center;padding:11px}
+.jn-err{
+  margin-top:10px;padding:9px 11px;border-radius:9px;
+  background:#2A1418;border:1px solid #5A2530;color:#FF8A96;font-size:12.5px;
+}
+@media (min-width:520px){ .jn-modal{align-items:center} .jn-dialog{border-radius:var(--radius)} }
+
+/* ---------- 展開內容 ---------- */
+.detail{border-top:1px solid var(--line);background:var(--panel-2);padding:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cell{background:var(--panel-2);padding:9px 10px}
+.cell dt{font-size:11px;color:var(--muted);margin:0 0 2px;letter-spacing:.03em}
+.cell dd{margin:0;font-size:15px;font-weight:700}
+.why{
+  font-size:13.5px;color:#C3CEDA;line-height:1.7;margin:0 0 13px;
+  padding:11px 13px;border-radius:10px;background:#12181F;border-left:3px solid var(--signal);
+}
+.why b{color:var(--signal);font-weight:800;margin-right:6px}
+.scoreline{font-size:12.5px;color:#9FACBA;margin:0 0 13px;line-height:1.8}
+.scoreline b{color:#C3CEDA;font-weight:700}
+.scoreline b.sig{color:var(--signal);font-size:15px}
+.scoreline .muted{color:var(--muted)}
+.rr{
+  display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:13px;padding:11px 13px;
+  border-radius:10px;background:#12181F;font-size:12.5px;
+}
+.rr div{display:flex;gap:8px;align-items:baseline}
+.rr span{color:var(--muted)}
+.rr b{font-weight:700}
+.reasons{margin:14px 0 0;padding:0;list-style:none}
+.reasons li{
+  font-size:13.5px;color:#C3CEDA;padding:6px 0 6px 16px;position:relative;line-height:1.55;
+}
+.reasons li::before{content:"";position:absolute;left:0;top:13px;width:6px;height:6px;
+  border-radius:2px;background:var(--signal)}
+.risklist{margin-top:14px;font-size:13px}
+.risklist>b{color:#FF9E80;font-weight:800;font-size:12.5px}
+.risklist ul{margin:6px 0 0;padding:0;list-style:none}
+.risklist li{
+  color:#B8A896;padding:5px 0 5px 18px;position:relative;line-height:1.55;font-size:13px;
+}
+.lvl{position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:2px;background:#4A3A28}
+.lvl1{background:#7A5A2E}.lvl2{background:#C07A3A}.lvl3{background:#E05A3A}
+.pts{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.9}
+.pts b{color:#C3CEDA;font-weight:600}
+
+/* ---------- 空狀態 ---------- */
+.empty{
+  background:var(--panel);border:1px dashed var(--line);border-radius:var(--radius);
+  padding:26px 18px;text-align:center;color:var(--muted);font-size:14px;
+}
+.empty b{display:block;color:var(--text);font-size:16px;margin-bottom:6px}
+
+/* ---------- 方法說明 & 底部 ---------- */
+.note{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;font-size:13px;color:#9FACBA;line-height:1.7;
+}
+.note h3{font-size:13px;color:var(--text);margin:0 0 8px;letter-spacing:.02em}
+.note code{font-family:ui-monospace,monospace;color:var(--signal);font-size:12px}
+.disclaimer-bottom{
+  margin:22px 0 8px;padding:16px;border-radius:var(--radius);
+  background:#2A1A12;border:1px solid #4A2E1B;color:#FFC98A;
+  font-size:13.5px;font-weight:600;line-height:1.7;text-align:center;
+}
+footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-height:1.8}
+
+@media (max-width:360px){
+  .name{font-size:16.5px} .px .close{font-size:17px} .score{font-size:20px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .card{transition:border-color .18s ease}
+  .card[open]{border-color:#33404E}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== 頂部免責聲明 ===================== -->
+<div class="disclaimer-top">⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險</div>
+
+<!-- 平常隱藏，只有斷網或有更新時才出現 -->
+<div class="toast offline" id="toast-offline">目前離線，顯示的是上次載入的資料</div>
+<div class="toast update" id="toast-update">
+  已有新的收盤資料<button type="button" id="btn-reload">重新載入</button>
+</div>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="./" class="on">首頁</a>
+    <a href="radar.html">雷達</a>
+    <a href="momentum.html">明日強勢</a>
+    <a href="portfolio.html">我的交易</a>
+  </nav>
+
+  <!-- ===================== 大盤 ===================== -->
+  <header>
+    <div class="eyebrow">TAIWAN SWING SCANNER</div>
+    <h1 class="title">{{ "今日勝率排行" if meta.has_winrate else "今日機會排行" }}
+      {% if meta.regime == 'bull' %}<span class="regime bull">🟢 多頭</span>
+      {% elif meta.regime == 'bear' %}<span class="regime bear">🔴 空頭</span>
+      {% else %}<span class="regime side">🟡 震盪</span>{% endif %}
+    </h1>
+
+    {% if index %}
+    <div class="market">
+      <div>
+        <div class="market-label">加權指數 TAIEX</div>
+        <div class="market-close mono">{{ '{:,.2f}'.format(index.close) }}</div>
+      </div>
+      <div>
+        <div class="market-chg mono {{ 'up' if index.chg_pct > 0 else ('down' if index.chg_pct < 0 else 'flat') }}">
+          {{ '%+.2f'|format(index.change) }}　{{ '%+.2f'|format(index.chg_pct) }}%
+        </div>
+        <div class="market-meta">{{ index.date }}　{{ index.source }}</div>
+      </div>
+    </div>
+    {% else %}
+    <div class="market"><div><div class="market-label">加權指數 TAIEX</div>
+      <div class="market-close mono flat">—</div></div>
+      <div class="market-meta">指數資料本次取得失敗</div></div>
+    {% endif %}
+
+    {% if us %}
+    <section class="us">
+      <h3>美股連動</h3>
+      {% if us.last_night %}
+      <div class="us-grid">
+        {% for m in us.last_night %}
+        <div><span>{{ m.label }}</span>
+          <b class="{{ 'up' if m.chg_pct > 0 else ('down' if m.chg_pct < 0 else 'flat') }}">{{ '%+.2f'|format(m.chg_pct) }}%</b></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if us.futures %}
+      <div class="us-grid us-sub">
+        {% for m in us.futures %}
+        <div><span>{{ m.label }}（此刻）</span>
+          <b class="{{ 'up' if m.chg_pct > 0 else ('down' if m.chg_pct < 0 else 'flat') }}">{{ '%+.2f'|format(m.chg_pct) }}%</b></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if us.forecast and us.forecast.available %}
+      <div class="us-fc">
+        {% if us.forecast.point > 0.25 %}<b class="lamp bull">🟢 海外環境偏多</b>
+        {% elif us.forecast.point < -0.25 %}<b class="lamp bear">🔴 海外環境偏空</b>
+        {% else %}<b class="lamp side">🟡 海外環境中性</b>{% endif %}
+        <div class="us-fine mono">中央估計 {{ '%+.2f'|format(us.forecast.point) }}%
+          · 區間 {{ '%+.2f'|format(us.forecast.low) }}% ～ {{ '%+.2f'|format(us.forecast.high) }}%
+          · R² {{ us.forecast.r2 }} · N {{ us.forecast.samples }}</div>
+      </div>
+      <p class="us-note">
+        這是「台股當日漲跌 ≈ a + b×前夜那斯達克 + c×前夜費半」的迴歸外推，
+        用現在的美股期貨代替今晚尚未發生的美股。R² {{ us.forecast.r2 }} 代表美股只能解釋台股約
+        {{ (us.forecast.r2 * 100)|round|int }}% 的波動，其餘來自台股自身的籌碼與消息面。
+        <b>這是統計相關性，不是預測，更不是投資建議。</b>
+        個股排名以大盤狀態與歷史期望值為準，這個燈號不參與排序。
+      </p>
+      {% elif us.forecast %}
+      <p class="us-note">{{ us.forecast.reason }}</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    {% if meta.mode == 'demo' %}
+    <div class="demo-flag">示範模式：以下價格與訊號皆為模擬資料，用來預覽版面，非真實行情。</div>
+    {% endif %}
+
+    <div class="refresh-msg" id="refresh-msg" hidden></div>
+    <div class="stamp">
+      <span id="freshness">更新時間 <b class="mono">{{ meta.generated_at }}</b></span>
+      <span>行情資料日 <b class="mono">{{ meta.data_date or meta.trade_date }}</b></span>
+      <span>{{ '06:00 海外盤更新' if meta.run_type == 'morning' else '16:00 收盤更新' }}
+        <b class="mono">{{ meta.generated_at }}</b></span>
+      <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
+      <span>掃描 <b class="mono">{{ meta.scanned_count }}</b> 檔</span>
+    </div>
+
+  </header>
+
+  <!-- ===================== 排名 ===================== -->
+  <div class="section-head">
+    <h2>{{ "勝率排名" if meta.has_winrate else "機會排名" }}</h2>
+    <span>名次為全部標的的總排名</span>
+  </div>
+
+  <!-- 只有一個預算輸入框：填了之後自動只顯示買得起的標的 -->
+  <section class="panel">
+    <div class="panel-row">
+      <div class="find">
+        <span>🔍</span>
+        <input id="find-q" type="search" placeholder="搜尋代號、名稱或產業，直接看名次"
+               autocomplete="off" enterkeyhint="search">
+        <button type="button" id="find-clear" title="清除">✕</button>
+      </div>
+    </div>
+
+    <div class="panel-row">
+      <label for="budget-input">本週預算</label>
+      <div class="budget-input">
+        <span>NT$</span>
+        <input id="budget-input" type="number" inputmode="numeric" min="0" step="1000"
+               placeholder="填了就只顯示買得起的" autocomplete="off">
+        <button type="button" id="budget-clear" title="清除">✕</button>
+      </div>
+    </div>
+
+    <div class="panel-row wrap">
+      {% for amt in budget_presets %}
+      <button type="button" class="preset" data-amt="{{ amt }}">{{ (amt // 10000) }}萬</button>
+      {% endfor %}
+    </div>
+
+    <div class="panel-row wrap">
+      <span class="lbl">配置</span>
+      <button type="button" class="mode-btn" data-mode="auto" aria-pressed="true">自動分配</button>
+      <button type="button" class="mode-btn" data-mode="pick" aria-pressed="false">
+        自己挑<span id="pick-count"></span>
+      </button>
+      <span class="sep"></span>
+      <span class="lbl" id="splits-label">分散成</span>
+      {% for n in split_options %}
+      <button type="button" class="split" data-n="{{ n }}"
+              aria-pressed="{{ 'true' if n == default_splits else 'false' }}">{{ n }}</button>
+      {% endfor %}
+      <button type="button" class="ghost-btn" id="pick-clear" hidden>清除選擇</button>
+    </div>
+
+    <div class="budget-result" id="budget-result"></div>
+
+    <div class="panel-row scroll" role="group" aria-label="類別">
+      <span class="lbl">類別</span>
+      <button type="button" class="type-btn" data-type="all" aria-pressed="true">全部</button>
+      <button type="button" class="type-btn" data-type="tech" aria-pressed="false">電子科技</button>
+      <button type="button" class="type-btn" data-type="etf" aria-pressed="false">ETF</button>
+      <button type="button" class="type-btn" data-type="other" aria-pressed="false">其他</button>
+    </div>
+
+    <div class="band-note" id="band-count"></div>
+    <p class="budget-note">
+      自動分配是把預算按獲利可能性分數比例做的<b>算術拆分</b>，單一標的上限 {{ max_position_pct }}%（只選 1 檔時放寬）；
+      自己挑則是在你選的標的之間平均分配。不是建議你買進，也沒有計入手續費與證交稅。
+      台股一張＝1000 股，{% if allow_odd_lot %}一張買不起時會改用零股試算（需券商支援盤中零股交易）。{% endif %}
+    </p>
+  </section>
+
+  {% if rows %}
+    {% for r in rows %}
+    <details class="card" data-code="{{ r.code }}" data-rank="{{ r.rank }}" data-lot="{{ r.lot_cost }}" data-name="{{ r.name }}" data-price="{{ r.close }}" data-score="{{ r.score }}"
+             {% if r.momentum_icon %}
+        <div class="mom mom{{ r.momentum_tier }}">
+          <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
+            <b>動能 {{ '%.0f'|format(r.momentum_score) }}/100</b></div>
+          {% if r.momentum_hits %}
+          <div class="mom-list ok">已確認：{{ r.momentum_hits|join('、') }}</div>
+          {% endif %}
+          {% if r.momentum_warns %}
+          <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
+          {% endif %}
+          <div class="mom-note">
+            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
+            今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
+          </div>
+        </div>
+        {% endif %}
+
+        {% if r.plan and r.plan.available %}data-trigger="{{ r.plan.trigger }}" data-stop="{{ r.plan.stop }}" data-t1="{{ r.plan.target1 }}" data-t2="{{ r.plan.target2 }}"{% endif %} data-type="{{ r.asset_type }}">
+      <summary>
+        <div class="row1">
+          <div class="rank {{ 'top' if (r.final_rank or r.rank) <= 3 }}">{{ r.final_rank or r.rank }}</div>
+          <div class="ident">
+            <div class="code mono">{{ r.code }}{% if r.momentum_icon %}<span class="mtier m{{ r.momentum_tier }}">{{ r.momentum_icon }} {{ r.momentum_label }}</span>{% endif %}<span class="kind">{{ r.kind }}</span><span class="sector">{{ r.sector }}</span>{% if r.score < meta.weak_score %}<span class="weak">訊號偏弱</span>{% endif %}
+              {% if r.mark and r.mark.badge %}<span class="mark" title="{{ r.mark.label }}">{{ r.mark.badge }}{% if r.mark.badge in ['🔥','↑','↓'] %}{{ r.mark.streak if r.mark.badge == '🔥' else (r.mark.rank_delta|abs) }}{% endif %}</span>{% endif %}</div>
+            <div class="name">{{ r.name }}</div>
+          </div>
+          <div class="px">
+            <div class="close mono">{{ '%.2f'|format(r.close) }}</div>
+            <div class="chg mono {{ 'up' if r.chg_pct > 0 else ('down' if r.chg_pct < 0 else 'flat') }}">
+              {{ '%+.2f'|format(r.chg_pct) }}%
+            </div>
+            <span class="lot mono">一張 {{ '%.1f'|format(r.lot_cost / 10000) }} 萬</span>
+          </div>
+        </div>
+
+        <!-- 機會分數能量條：每段寬度＝該項權重，填滿比例＝該項得分比例 -->
+        <div class="meter" role="img"
+             aria-label="機會分數組成：{% for k,l in segments %}{{ l }} {{ (r.breakdown[k].ratio*100)|round|int }}%{{ '，' if not loop.last }}{% endfor %}">
+          {% for k, label in segments %}
+          <div class="seg" style="flex:{{ r.breakdown[k].max }}">
+            <i style="width:{{ (r.breakdown[k].ratio*100)|round(1) }}%"></i>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="meter-labels" aria-hidden="true">
+          {% for k, label in segments %}
+          <span style="flex:{{ r.breakdown[k].max }}">{{ label }}</span>
+          {% endfor %}
+        </div>
+
+        <div class="row3">
+          <div class="headline">{{ r.headline }}</div>
+          {% if r.final_score is defined and r.final_score is not none %}
+          <div class="score mono">{{ '%.0f'|format(r.final_score) }}<span class="pct">/100</span><em>綜合分數</em></div>
+          {% elif r.hist_calibrated is not none %}
+          <div class="score mono">{{ '%.0f'|format(r.hist_calibrated) }}<span class="pct">%</span><em>歷史勝率</em></div>
+          {% else %}
+          <div class="score mono nodata">{{ '%.0f'|format(r.score) }}<em>技術分數</em></div>
+          {% endif %}
+        </div>
+
+        <div class="pickrow">
+          <button type="button" class="pick" data-pick data-code="{{ r.code }}" aria-pressed="false">
+            ＋ 選入
+          </button>
+          <button type="button" class="jbuy" data-jbuy data-code="{{ r.code }}"
+                  data-name="{{ r.name }}" data-price="{{ r.close }}">＋加入我的持股</button>
+          <div class="alloc" data-alloc hidden></div>
+        </div>
+
+        <!-- 星等：趨勢強不強、現在買位置好不好，分開看 -->
+        <dl class="stars">
+          {% for k, label in star_rows %}
+          <div><dt>{{ label }}</dt><dd>{{ r.stars[k] }}</dd></div>
+          {% endfor %}
+          <div class="risk-star"><dt>風險</dt><dd>{{ r.stars.risk }} {{ r.risk_level }}</dd></div>
+        </dl>
+
+        {% if r.final_score is defined and r.final_score is not none %}
+        <div class="final">
+          <span>綜合 <b>{{ '%.0f'|format(r.final_score) }}/100</b></span>
+          <span>模型品質 <b>{{ '%.0f'|format(r.model_quality) }}</b>×65%</span>
+          <span>進場品質 <b>{{ '%.0f'|format(r.entry_quality) }}</b>×35%</span>
+          <span>動能 <b>{{ '%.0f'|format(r.momentum_score) }}</b></span>
+          <span class="sub">模型名次 第 {{ r.rank }} 名</span>
+          {% if r.top_fill %}
+          <span class="fill">強勢確認不足 {{ top_slots }} 檔，這一檔是由潛力觀察補入</span>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="swing">
+          <span>預期 Swing 空間 <b class="mono">+{{ '%.1f'|format(r.swing_low) }}% ～ +{{ '%.1f'|format(r.swing_high) }}%</b></span>
+          {% if r.hist_calibrated is not none %}
+          <span class="wr">5日勝率 <b class="mono">{{ '%.0f'|format(r.hist_calibrated) }}%</b>
+            · EV <b class="mono {{ 'up' if (r.hist_expectancy or 0) > 0 else 'down' }}">{{ '%+.1f'|format(r.hist_expectancy or 0) }}%</b>
+            {% if r.hist_pf %}· PF <b class="mono">{{ r.hist_pf }}</b>{% endif %}
+            · N=<b class="mono">{{ r.hist_samples }}</b>
+            <b class="conf">{{ '★' * r.hist_confidence }}</b></span>
+          {% else %}
+          <span class="wr nodata">歷史樣本不足（N&lt;{{ pattern_min_samples }}），僅供型態參考</span>
+          {% endif %}
+        </div>
+        <div class="mainrisk">主要風險：{{ r.main_risk }}</div>
+
+        {% for f in r.flags %}<span class="chip">{{ f }}</span>{% endfor %}
+      </summary>
+
+      <div class="detail">
+        <div class="why"><b>為什麼是它？</b>{{ r.edge or r.why }}</div>
+        {% if r.spark %}
+        <div class="spark" data-spark='{{ r.spark|tojson }}'></div>
+        {% endif %}
+
+        {% if r.final_parts %}
+        <div class="scoreline">
+          <b>綜合分數 {{ '%.0f'|format(r.final_score) }}/100</b>
+          ＝ 模型品質 {{ '%.0f'|format(r.model_quality) }} × 65% ＋ 進場品質 {{ '%.0f'|format(r.entry_quality) }} × 35%
+          <br><span class="muted">
+          模型品質：EV {{ r.final_parts.model.ev }}、勝率 {{ r.final_parts.model.winrate }}、
+          PF {{ r.final_parts.model.pf }}、回撤 {{ r.final_parts.model.mdd }}、技術分數 {{ r.final_parts.model.tech }}<br>
+          進場品質：收盤確認 {{ r.final_parts.entry.confirm }}、量能 {{ r.final_parts.entry.volume }}、
+          RR {{ r.final_parts.entry.rr }}、距觸發價 {{ r.final_parts.entry.distance }}<br>
+          全部標準化成 0～100 後加權；沒有歷史樣本的項目以中性 50 代入。
+          這一層<b>沒有改動任何模型</b>，EV、勝率、PF、回測、walk-forward 全部照舊。
+          清單順序先分 🟢 強勢確認 → 🟡 潛力觀察 → 🔴 轉弱／追高，
+          同層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
+          </span>
+        </div>
+        {% endif %}
+
+        <div class="scoreline">
+          機會分數 <b class="mono">{{ '%.0f'|format(r.opportunity) }}</b>
+          × 風險調整 <b class="mono">{{ '%.2f'|format(1 - (thresholds.risk_cut/100) * r.risk/100) }}</b>
+          ＝ 技術分數 <b class="mono sig">{{ '%.0f'|format(r.score) }}</b>
+          <span class="muted">（風險分數 {{ '%.0f'|format(r.risk) }}／100）</span>
+          <br><span class="muted">
+          {% if r.hist_calibrated is not none %}
+            名次依<b>歷史平滑勝率 {{ '%.1f'|format(r.hist_calibrated) }}%</b> 決定（來源：{{ '型態＋分數級距' if r.hist_source == 'pattern' else '分數級距' }}，
+            {{ r.hist_samples }} 筆樣本，未平滑勝率 {{ r.hist_raw }}%）。
+            技術分數只用來分層，不直接決定名次；勝率相同時才比技術分數。
+          {% else %}
+            這個型態與分數級距的歷史樣本不足 {{ pattern_min_samples }} 筆，<b>沒有可信的勝率可用</b>，
+            因此暫以先驗 50% 計入排名，並改用技術分數決定先後。
+          {% endif %}
+          </span>
+        </div>
+
+        {% if r.momentum_icon %}
+        <div class="mom mom{{ r.momentum_tier }}">
+          <div class="mom-head">{{ r.momentum_icon }} {{ r.momentum_label }}
+            <b>動能 {{ '%.0f'|format(r.momentum_score) }}/100</b></div>
+          {% if r.momentum_hits %}
+          <div class="mom-list ok">已確認：{{ r.momentum_hits|join('、') }}</div>
+          {% endif %}
+          {% if r.momentum_warns %}
+          <div class="mom-list bad">風險：{{ r.momentum_warns|join('、') }}</div>
+          {% endif %}
+          <div class="mom-note">
+            動能只用今天的價量判斷「現在該不該進場」，<b>不影響 EV、勝率、PF 與回測</b>。
+            今日漲幅超過 {{ mom_high }}% 不再加分，避免變成追高。
+          </div>
+        </div>
+        {% endif %}
+
+        {% if r.plan and r.plan.available %}
+        <div class="plan plan-{{ 'go' if r.plan.status == '可觀察進場' else ('no' if r.plan.status == '禁止追價' else 'wait') }}">
+          <div class="plan-head">明日交易計畫 · <b>{{ r.plan.status }}</b></div>
+          {% if r.plan.entry_status %}
+          <div class="entry entry-{{ r.plan.vol_tier if r.plan.entry_icon == '⚠' else ('go' if r.plan.entry_icon == '🟢' else ('no' if r.plan.entry_icon == '⛔' else 'wait')) }}">
+            <div class="entry-st">{{ r.plan.entry_icon }} {{ r.plan.entry_status }}</div>
+            <div class="entry-note">{{ r.plan.entry_note }}</div>
+            <div class="entry-facts">
+              <span>距觸發價 <b>{{ '%+.2f'|format(r.plan.dist_trigger_pct) }}%</b></span>
+              <span>量能 <b>{{ '%.2f'|format(r.plan.vol_ratio) }}×</b></span>
+              <span>RR <b>{{ '%.2f'|format(r.plan.rr) if r.plan.rr else '--' }}</b></span>
+              <span>失效價 <b>{{ '%.2f'|format(r.plan.invalidation) }}</b></span>
+            </div>
+            <div class="entry-rr rr-{{ r.plan.rr_tier }}">{{ r.plan.rr_tag }}</div>
+            <div class="entry-note">盤中是否已突破，請看<a href="alerts.html">盤中提醒</a>；這裡只用收盤資料判斷。</div>
+          </div>
+          {% endif %}
+          <div class="plan-note">{{ r.plan.note }}</div>
+          <div class="plan-grid">
+            <div><span>觸發價</span><b class="mono">{{ '%.2f'|format(r.plan.trigger) }}</b></div>
+            <div><span>失效價</span><b class="mono">{{ '%.2f'|format(r.plan.invalidation) }}</b></div>
+            <div><span>停損</span><b class="mono down">{{ '%.2f'|format(r.plan.stop) }}</b></div>
+            <div><span>目標一</span><b class="mono up">{{ '%.2f'|format(r.plan.target1) }}</b></div>
+            <div><span>目標二</span><b class="mono up">{{ '%.2f'|format(r.plan.target2) }}</b></div>
+            <div><span>RR</span><b class="mono">{{ r.plan.rr if r.plan.rr else '—' }}</b></div>
+          </div>
+          <div class="plan-note">單筆風險約 {{ r.plan.risk_pct }}%（觸發價到停損），ATR 波動 {{ r.plan.atr_pct }}%。
+            價位由 ATR 與支撐壓力換算，不保證成交也不保證獲利。</div>
+        </div>
+        {% endif %}
+
+        <dl class="grid">
+          <div class="cell"><dt>RSI(14)</dt><dd class="mono">{{ '%.1f'|format(r.rsi) }}</dd></div>
+          <div class="cell"><dt>量 / 20日均量</dt><dd class="mono">{{ '%.2f'|format(r.vol_ratio) }}×</dd></div>
+          <div class="cell"><dt>成交量(張)</dt><dd class="mono">{{ '{:,.0f}'.format(r.volume/1000) }}</dd></div>
+          <div class="cell"><dt>MA5</dt><dd class="mono">{{ '%.2f'|format(r.ma5) }}</dd></div>
+          <div class="cell"><dt>MA10</dt><dd class="mono">{{ '%.2f'|format(r.ma10) }}</dd></div>
+          <div class="cell"><dt>MA20</dt><dd class="mono">{{ '%.2f'|format(r.ma20) }}</dd></div>
+          <div class="cell"><dt>MA60</dt><dd class="mono">{{ '%.2f'|format(r.ma60) }}</dd></div>
+          <div class="cell"><dt>MA20 斜率</dt><dd class="mono">{{ '%+.2f'|format(r.ma20_slope) }}%</dd></div>
+          <div class="cell"><dt>距 MA20 乖離</dt><dd class="mono">{{ '%+.1f'|format(r.bias20) }}%</dd></div>
+          <div class="cell"><dt>距 20 日低</dt><dd class="mono">+{{ '%.1f'|format(r.pct_above_low20) }}%</dd></div>
+          <div class="cell"><dt>距 20 日高</dt><dd class="mono">−{{ '%.1f'|format(r.pct_below_high20) }}%</dd></div>
+          <div class="cell"><dt>距 60 日高</dt><dd class="mono">−{{ '%.1f'|format(r.pct_below_high60) }}%</dd></div>
+          <div class="cell"><dt>20 日區間位置</dt><dd class="mono">{{ (r.pos20*100)|round|int }}%</dd></div>
+          <div class="cell"><dt>ATR 波動</dt><dd class="mono">{{ '%.1f'|format(r.atr_pct) }}%</dd></div>
+          <div class="cell"><dt>MACD 柱</dt><dd class="mono">{{ '%+.3f'|format(r.macd_hist) }}</dd></div>
+        </dl>
+
+        <div class="rr">
+          <div><span>上檔目標</span><b class="mono up">{{ '%.2f'|format(r.target) }}　+{{ '%.1f'|format(r.upside_pct) }}%</b></div>
+          <div><span>下檔支撐</span><b class="mono down">{{ '%.2f'|format(r.support) }}　−{{ '%.1f'|format(r.downside_pct) }}%</b></div>
+          <div><span>風險報酬比</span><b class="mono">{{ '%.1f'|format(r.rr_ratio) }} : 1</b></div>
+        </div>
+
+        <ul class="reasons">
+          {% for reason in r.reasons %}<li>{{ reason }}</li>{% endfor %}
+        </ul>
+
+        {% if r.risk_items %}
+        <div class="risklist">
+          <b>風險項目</b>
+          <ul>
+            {% for it in r.risk_items %}
+            <li><span class="lvl lvl{{ (it.level*3)|round|int }}"></span>{{ it.label }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <div class="pts">
+          機會分數組成：
+          {% for k, label in segments %}
+          <b>{{ label }}</b> {{ '%.1f'|format(r.breakdown[k].points) }}/{{ r.breakdown[k].max }}{{ '　' if not loop.last }}
+          {% endfor %}
+        </div>
+      </div>
+    </details>
+    {% endfor %}
+
+    <button type="button" class="more" id="show-more" hidden></button>
+  {% else %}
+    <div class="empty">
+      <b>今天沒有達標的標的</b>
+      掃描了 {{ meta.scanned_count }} 檔，沒有任何一檔同時滿足超賣與量能條件。
+      分數門檻設在 {{ meta.min_score }} 分，寧可空手也不硬找。明天收盤後會再更新。
+    </div>
+  {% endif %}
+
+  <div class="empty" id="band-empty" style="display:none">
+    <b>這個條件下沒有符合的標的</b>
+    掃描到的標的裡，沒有一檔同時符合你選的類別與預算。可以提高預算、換個類別看看，或明天再來。
+    若想從源頭就只掃低價股，把 <code>scripts/config.py</code> 的 <code>MAX_CLOSE_PRICE</code>
+    設成你的每股上限即可。
+  </div>
+
+  {% if portfolio and portfolio.days %}
+  <div class="section-head"><h2>模擬投資組合</h2><span>本金 {{ '{:,.0f}'.format(portfolio.initial) }} · 規則自動執行</span></div>
+  <div class="pf">
+    <div class="pf-top">
+      <div><span>總報酬</span>
+        <b class="mono {{ 'up' if portfolio.total_return > 0 else ('down' if portfolio.total_return < 0 else '') }}">{{ '%+.2f'|format(portfolio.total_return) }}%</b></div>
+      <div><span>同期大盤</span>
+        <b class="mono {{ 'up' if (portfolio.benchmark_return or 0) > 0 else ('down' if (portfolio.benchmark_return or 0) < 0 else '') }}">{{ ('%+.2f'|format(portfolio.benchmark_return) ~ '%') if portfolio.benchmark_return is not none else '—' }}</b></div>
+      <div><span>交易數</span><b class="mono">{{ portfolio.trades }}</b></div>
+      <div><span>勝率</span><b class="mono">{{ (portfolio.win_rate ~ '%') if portfolio.win_rate is not none else '—' }}</b></div>
+      <div><span>PF</span><b class="mono">{{ portfolio.profit_factor if portfolio.profit_factor is not none else '—' }}</b></div>
+      <div><span>最大回撤</span><b class="mono down">{{ '%.2f'|format(portfolio.mdd) }}%</b></div>
+    </div>
+    {% if portfolio.positions %}
+    <div class="pf-list">
+      <b>目前持股</b>
+      {% for p in portfolio.positions %}
+      <div class="pf-row"><span class="mono">{{ p.code }}</span>{{ p.name }}
+        <span class="pf-meta mono">成本 {{ '%.2f'|format(p.entry) }} · 停損 {{ '%.2f'|format(p.stop) }} · 持有 {{ p.held }} 日</span></div>
+      {% endfor %}
+    </div>
+    {% elif portfolio.pending %}
+    <div class="pf-list"><b>明日待成交 {{ portfolio.pending }} 筆</b>
+      <div class="pf-meta">以明日開盤價成交，等權配置</div></div>
+    {% else %}
+    <div class="pf-list"><span class="pf-meta">目前空手</span></div>
+    {% endif %}
+    {% if portfolio.recent %}
+    <div class="pf-list">
+      <b>最近平倉</b>
+      {% for t in portfolio.recent %}
+      <div class="pf-row"><span class="mono">{{ t.code }}</span>{{ t.name }}
+        <span class="pf-meta mono {{ 'up' if t.net_pct > 0 else 'down' }}">{{ '%+.2f'|format(t.net_pct) }}% · {{ t.reason }} · 持有 {{ t.held }} 日</span></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <p class="pf-note">
+      規則：每日最多持有 {{ paper_max_positions }} 檔、等權配置、隔日開盤成交、
+      觸及停損或目標一出場、最長持有 {{ paper_max_hold }} 個交易日，來回扣 {{ backtest.cost_pct if backtest else 0.3 }}% 成本。
+      完全依規則執行，沒有人為判斷，也沒有使用任何未來資料。這是紀錄，不是實際交易。
+    </p>
+  </div>
+  {% endif %}
+
+  <!-- 記帳表單（買入 / 賣出 / 編輯共用一個） -->
+  <div class="jn-toast" id="jn-saved" hidden>
+    已存進「我的交易」 · <a href="portfolio.html">前往查看</a>
+  </div>
+
+  <div class="jn-modal" id="jn-modal" hidden>
+    <div class="jn-dialog" role="dialog" aria-modal="true" aria-labelledby="jn-title">
+      <h3 id="jn-title">新增交易</h3>
+      <div class="jn-form" id="jn-form"></div>
+      <div class="jn-err" id="jn-err" hidden></div>
+      <div class="jn-actions">
+        <button type="button" class="btn-j" id="jn-cancel">取消</button>
+        <button type="button" class="btn-j primary" id="jn-save">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  {% if signals and (signals.new_count or signals.hot_count or signals.dropped) %}
+  <div class="section-head"><h2>訊號追蹤</h2><span>近 {{ signals.history_days }} 日</span></div>
+  <div class="note track">
+    今日新訊號 <b>{{ signals.new_count }}</b> 檔 · 連續入榜 <b>{{ signals.hot_count }}</b> 檔
+    {% if signals.dropped %}<br>❌ 已掉出榜單：
+      {% for d in signals.dropped %}<span class="mono">{{ d.symbol }}</span>（原第 {{ d.prev_rank }} 名）{{ '、' if not loop.last }}{% endfor %}
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if backtest and backtest.walk_forward %}
+  <div class="note wf">
+    {% if backtest.walk_forward.available %}
+    <b>Walk-forward</b>（out-of-sample）：EV {{ '%+.2f'|format(backtest.walk_forward.expectancy) }}% ·
+    PF {{ backtest.walk_forward.profit_factor }} · N {{ backtest.walk_forward.samples }}
+    <span class="muted">（{{ backtest.walk_forward.folds }} 段滾動校準，僅用前期資料建表再測後期）</span>
+    {% else %}
+    <b>Walk-forward</b>：{{ backtest.walk_forward.reason }}
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- ===================== 方法說明 ===================== -->
+  <div class="section-head"><h2>分數怎麼算的</h2><span>0～100</span></div>
+  <div class="note">
+    <h3>清單順序：先看進場狀態，再看綜合分數</h3>
+    卡片上的名次是<b>最終進場排名</b>，先依<b>動能確認</b>分三層：<br>
+    🟢 <b>強勢確認</b>（收盤站上基準價、量能達標、動能分數 {{ mom_green }} 以上）→
+    🟡 <b>潛力觀察</b>（模型看好但今天還沒確認）→
+    🔴 <b>轉弱／追高風險</b>（今日跌逾 3%、收盤跌破 MA5、爆量收黑、收盤跌破昨日低點、
+    MACD 明顯轉弱，或距 MA20 乖離超過 {{ mom_bias }}%）。<br>
+    同一層內再依「綜合分數 60% ＋ 動能分數 40%」排序。
+    前 {{ top_slots }} 名優先只從 🟢 挑，不足才由 🟡 補入，並在卡片上明說是補進來的。<br><br>
+
+    <b>動能不是追高</b>：今日漲幅落在 +{{ mom_low }}%～+{{ mom_high }}% 才加分，
+    超過 {{ mom_high }}% 不再加分。今天已經噴出的股票不會因為漲很多而排到前面。
+    動能只影響排序與風險過濾，<b>EV、勝率、PF、技術分數、回測、walk-forward 一律不變</b>。<br><br>
+
+    <b>綜合分數</b> ＝ 模型品質 × 65% ＋ 進場品質 × 35%（各自標準化成 0～100）<br>
+    <b>模型品質</b>：EV 30%、平滑勝率 25%、PF 20%、平均回撤 10%、技術分數 15%<br>
+    <b>進場品質</b>：收盤是否站上基準價 40%、量能倍數 25%、RR 25%、距觸發價 10%<br>
+    沒有歷史樣本的項目以中性 50 代入，不會因為缺資料被懲罰或加分。<br>
+    這一層<b>沒有改動任何模型</b>——EV、勝率、PF、回測、walk-forward 全部照舊，
+    每張卡片也仍然標示原本的<b>模型名次</b>。<br><br>
+
+    <h3>模型名次的依據：歷史勝率優先，技術分數只是分層特徵</h3>
+    首頁名次的第一順位是<b>歷史平滑勝率</b>，不是技術分數。做法是：
+    先用技術面把每檔標的歸類成「型態 ＋ 分數級距」（例如「帶量突破 ＋ 65–75 分」），
+    再去查回測資料裡同一類訊號歷史上贏過幾次。<br><br>
+
+    <b>排序順位</b>：期望值 EV → 平滑勝率 → Profit Factor → 平均最大回撤 → 技術分數。
+    EV = 勝率×平均獲利 ＋ 敗率×平均虧損（已扣成本）。
+    <b>EV ≤ 0 的標的會降到有正 EV 的之後，但不會被刪除</b>，仍看得到名次。<br>
+    <b>查表順序</b>：大盤狀態＋型態＋分數級距 → 型態＋分數級距 → 分數級距 → 樣本不足。<br>
+    <b>可信度</b>：N&lt;30 樣本不足、30–59 ★★、60–119 ★★★、120–249 ★★★★、≥250 ★★★★★。<br>
+    <b>勝率平滑</b>：(勝場 + {{ smooth_wins }}) / (樣本 + {{ smooth_n }})，避免「3 戰 3 勝 = 100%」這種假訊號。<br>
+    <b>樣本門檻</b>：型態層需 {{ pattern_min_samples }} 筆，不足退回只看分數級距；再不足就標示
+    <b>樣本不足</b>，以先驗 50% 計入排名並改用技術分數決定先後——不會生一個假勝率出來。<br><br>
+
+    <h3>技術分數怎麼算（0～100）</h3>
+    機會分數（五項加權正規化）× 風險調整。趨勢強度與進場位置是分開的兩件事——
+    RSI 90、貼著前高的股票趨勢分數會很高，但位置分數低、風險分數高。<br>
+    <b>位置 {{ weights.entry }}</b>：20 日區間位置、距 20／60 日高點空間、MA20 乖離、RSI 區帶。<br>
+    <b>趨勢 {{ weights.trend }}</b>：MA5/10/20/60 排列與斜率、是否站穩季線。<br>
+    <b>轉強 {{ weights.reversal }}</b>：RSI 自低檔回升、站回 MA5、金叉、MACD 柱改善、帶量收紅。<br>
+    <b>量價 {{ weights.volume }}</b>：量能倍數 × 品質係數（長上影、爆量收黑、高檔爆量大幅打折）。<br>
+    <b>風報 {{ weights.rr }}</b>：以高點與 ATR 推估上檔，以 MA20、近期低點與 ATR 推估下檔。<br>
+    <b>風險調整</b>：過熱、追高、乖離、連漲、假突破、未止跌，最多打 {{ 100 - thresholds.risk_cut }} 折。<br><br>
+
+    {% if backtest %}
+    <h3>回測條件</h3>
+    期間 {{ backtest.period }}，共 {{ backtest.samples }} 筆有效樣本。
+    {{ backtest.entry_rule }}；淨報酬已扣 {{ backtest.cost_pct }}% 來回交易成本，
+    <b>淨報酬 &gt; 0 才算贏</b>；同一檔出訊號後 {{ backtest.cooldown_days }} 個交易日內不重複採樣。
+    以持有 {{ backtest.hold_days }} 日為主。歷史結果不代表未來績效。<br><br>
+    {% else %}
+    <b>⚠️ 目前沒有可用的回測資料</b>（找不到 <code>data/backtest.json</code>，或各分層樣本都不足
+    {{ pattern_min_samples }} 筆）。因此所有標的顯示「樣本不足」，名次暫由技術分數決定，
+    標題也改為「機會排行」而非「勝率排行」。<br>
+    每日更新的流程會在缺少回測檔時自動補跑一次；也可以到 repo 的 Actions 手動執行
+    <b>每週回測</b>。<br><br>
+    {% endif %}
+
+    共掃描 {{ meta.scanned_count }} 檔，全部列出並保留完整名次，
+    切換類別時看到的名次是<b>總排名</b>——ETF 的第一名如果是總排名第 47 名，顯示的就是 47。<br>
+    掃描池為當日成交金額前 {{ meta.top_n }} 名 + 主要權值股 + 電子科技股 + 台股 ETF；
+    股價低於 {{ thresholds.min_price }} 元或成交金額低於 {{ thresholds.min_turnover }} 的不納入。
+    槓桿型（L）、反向型（R）、債券型（B）ETF 排除。<br>
+    本週預算與類別只影響顯示與配置試算，<b>不影響排名</b>。<br>
+    要調整邏輯，改 <code>scripts/config.py</code>。
+  </div>
+
+  <!-- ===================== 底部免責聲明 ===================== -->
+  <div class="disclaimer-bottom">
+    ⚠️ 本工具僅供個人技術分析參考，不構成任何投資建議，投資有風險<br>
+    歷史勝率是過去相似訊號的統計結果，不是未來的成功機率；技術分數更只是型態描述。<br>
+    分數高不代表會上漲，技術指標只描述過去的價量行為。<br>
+    資料可能因來源延遲或錯誤而失真，下單前請自行以券商報價複核。
+  </div>
+
+  <footer>
+    台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
+    <span class="mono">{{ meta.generated_at }}</span>
+  </footer>
+</div>
+
+<script>
+/* =========================================================================
+   app 行為：全部是漸進增強，就算這段整個掛掉，頁面內容照樣看得到。
+   ========================================================================= */
+(function () {
+  "use strict";
+
+  var GENERATED = "{{ meta.generated_iso }}";
+  var TRADE_DATE = "{{ meta.trade_date }}";
+
+  /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
+  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+    navigator.serviceWorker.register("./sw.js").catch(function () {});
+  }
+
+  /* ---- 2) 相對更新時間：上班時間掃一眼就知道資料多新 ---- */
+  var freshness = document.getElementById("freshness");
+  function renderFreshness() {
+    if (!freshness) return;
+    var t = new Date(GENERATED);
+    if (isNaN(t)) return;
+    var mins = Math.floor((Date.now() - t.getTime()) / 60000);
+    var word;
+    if (mins < 2) word = "剛剛更新";
+    else if (mins < 60) word = mins + " 分鐘前更新";
+    else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
+    else word = Math.floor(mins / 1440) + " 天前更新";
+    freshness.innerHTML = '<b>' + word + '</b>';
+    freshness.title = "更新時間 {{ meta.generated_at }}";
+  }
+  renderFreshness();
+  setInterval(renderFreshness, 60000);
+
+  /* ---- 3) 離線提示 ---- */
+  var offlineBar = document.getElementById("toast-offline");
+  function syncOnline() {
+    if (offlineBar) offlineBar.classList.toggle("show", !navigator.onLine);
+  }
+  window.addEventListener("online", syncOnline);
+  window.addEventListener("offline", syncOnline);
+  syncOnline();
+
+  /* ---- 3.5) 更新數據按鈕 ------------------------------------------------
+     這是靜態網頁，資料由 GitHub Actions 每天 06:00（海外盤）與 16:00（收盤）
+     產生。按鈕做的是「去伺服器確認有沒有新資料」，不是叫伺服器重算：
+       1. 繞過快取抓 data/latest.json
+       2. 比對 generated_at，有更新就清掉 Service Worker 的舊快取並重新載入
+       3. 沒有就直接告訴你目前是哪一班的資料、下一班什麼時候
+     ---------------------------------------------------------------------- */
+  var refreshBtn = document.getElementById("btn-refresh");
+  var refreshMsg = document.getElementById("refresh-msg");
+  var CURRENT_STAMP = "{{ meta.generated_at }}";
+
+  function showMsg(text, isNew) {
+    if (!refreshMsg) return;
+    refreshMsg.hidden = false;
+    refreshMsg.textContent = text;
+    refreshMsg.classList.toggle("new", !!isNew);
+  }
+
+  function nextRunHint() {
+    // 排程是台北時間，不能用裝置本地時區算，否則人在國外會顯示錯誤
+    var h;
+    try {
+      h = parseInt(new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Taipei", hour: "2-digit", hour12: false
+      }).format(new Date()), 10);
+    } catch (e) {
+      h = new Date().getHours();
+    }
+    if (h < 6) return "下一次更新：今天 06:00（海外盤）";
+    if (h < 16) return "下一次更新：今天 16:00（台股收盤）";
+    return "下一次更新：明天 06:00（海外盤）";
+  }
+
+  /* 盤中／收盤價的來源：GitHub Pages 部署有頻率限制，不可能每 5 分鐘重新部署，
+     所以直接讀 raw.githubusercontent.com 上剛 commit 的檔案，讀不到才退回同站。 */
+  function intradaySources() {
+    var urls = [];
+    var m = (location.hostname || "").match(/^([^.]+)\.github\.io$/);
+    if (m) {
+      var repo = (location.pathname.split("/").filter(Boolean)[0]) || "";
+      if (repo && repo.indexOf(".html") < 0) {
+        ["main", "master"].forEach(function (br) {
+          urls.push("https://raw.githubusercontent.com/" + m[1] + "/" + repo +
+                    "/" + br + "/data/intraday.json");
+        });
+      }
+    }
+    urls.push("./data/intraday.json");
+    return urls;
+  }
+
+  function fetchIntraday() {
+    var urls = intradaySources(), i = 0;
+    function next() {
+      if (i >= urls.length) return Promise.reject(new Error("none"));
+      var u = urls[i++];
+      return fetch(u + (u.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(),
+                   { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("bad")); })
+        .catch(next);
+    }
+    return next();
+  }
+
+  /* 把最新價套到卡片上。**只換價格，不重算排名與分數**——
+     那些要用完整歷史資料在伺服器端算，瀏覽器裡做不到，也不該假裝做得到。 */
+  function applyLivePrices(j) {
+    var rows = (j && j.rows) || [];
+    var n = 0;
+    rows.forEach(function (r) {
+      if (!r || !r.symbol || !(r.price > 0)) return;
+      var c = document.querySelector('details.card[data-code="' + r.symbol + '"]');
+      if (!c) return;
+
+      c.dataset.price = r.price;
+      c.dataset.lot = Math.round(r.price * 1000);
+
+      var closeEl = c.querySelector(".px .close");
+      if (closeEl) closeEl.textContent = r.price.toFixed(2);
+
+      var chgEl = c.querySelector(".px .chg");
+      if (chgEl && r.chg_pct !== null && r.chg_pct !== undefined) {
+        chgEl.textContent = (r.chg_pct > 0 ? "+" : "") + r.chg_pct.toFixed(2) + "%";
+        chgEl.className = "chg mono " +
+          (r.chg_pct > 0 ? "up" : (r.chg_pct < 0 ? "down" : "flat"));
+      }
+
+      var lotEl = c.querySelector(".lot");
+      if (lotEl) lotEl.textContent = "一張 " + (r.price * 1000 / 10000).toFixed(1) + " 萬";
+
+      c.classList.add("live-px");
+      n++;
+    });
+    if (n) render();          // 預算配置要用新價重算張數
+    return n;
+  }
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener("click", function () {
+      refreshBtn.disabled = true;
+      refreshBtn.textContent = "↻ 檢查中…";
+      showMsg("正在向伺服器確認有沒有新資料…", false);
+
+      fetch("./data/latest.json?t=" + Date.now(), { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error("bad")); })
+        .then(function (j) {
+          var stamp = (j.meta && j.meta.generated_at) || "";
+          if (stamp && stamp !== CURRENT_STAMP) {
+            showMsg("有新資料（" + stamp + "），正在重新載入…", true);
+            // 清掉 Service Worker 的舊快取，確保拿到新的 index.html
+            if (window.caches && caches.keys) {
+              caches.keys().then(function (ks) {
+                return Promise.all(ks.map(function (k) { return caches.delete(k); }));
+              }).then(function () { location.reload(); });
+            } else {
+              location.reload();
+            }
+            return;
+          }
+          // 排行沒有重算，但價格可以用盤中／收盤那支抓到的最新價即時更新
+          var kind = (j.meta && j.meta.run_type) === "morning" ? "06:00 海外盤" : "16:00 收盤";
+          fetchIntraday().then(function (q) {
+            var n = applyLivePrices(q);
+            if (n) {
+              var when = q.data_time || q.generated_at || "";
+              var label = q.is_closing_price ? "今日收盤價" : (q.market_open ? "盤中最新價" : "最後成交價");
+              showMsg("已套用" + label + "（" + when + "，" + n + " 檔）。" +
+                      "排名與分數仍是 " + kind + "（" + (stamp || "--") + "）算的，" +
+                      "要等下一班才會用新價重算。", true);
+            } else {
+              showMsg("已是最新：" + kind + "，更新於 " + (stamp || "--") + "。" +
+                      (q && q.note ? q.note + " " : "") + nextRunHint(), false);
+            }
+            refreshBtn.disabled = false;
+            refreshBtn.textContent = "↻ 更新數據";
+          }).catch(function () {
+            showMsg("已是最新：" + kind + "，更新於 " + (stamp || "--") + "。" + nextRunHint(), false);
+            refreshBtn.disabled = false;
+            refreshBtn.textContent = "↻ 更新數據";
+          });
+        })
+        .catch(function () {
+          showMsg("連不到伺服器，顯示的是本機快取的資料。" + nextRunHint(), false);
+          refreshBtn.disabled = false;
+          refreshBtn.textContent = "↻ 更新數據";
+        });
+    });
+  }
+
+  /* ---- 4) 有新收盤資料就提示（避免看到手機快取的舊版） ---- */
+  var updateBar = document.getElementById("toast-update");
+  var reloadBtn = document.getElementById("btn-reload");
+  function checkForNewData() {
+    if (!navigator.onLine || location.protocol.indexOf("http") !== 0) return;
+    fetch("./data/latest.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (j && j.meta && j.meta.trade_date && j.meta.trade_date !== TRADE_DATE) {
+          if (updateBar) updateBar.classList.add("show");
+        }
+      })
+      .catch(function () {});
+  }
+  if (reloadBtn) reloadBtn.addEventListener("click", function () { location.reload(); });
+  checkForNewData();
+  // 從背景切回前景時再確認一次（早上打開 app 的情境）
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) { syncOnline(); renderFreshness(); checkForNewData(); }
+  });
+
+  /* ---- 5) 預算、篩選、配置：全部由這個控制器統一處理 ------------------------
+     規則：
+       - 只有一個預算輸入框。填了之後，一張買不起的標的直接不顯示。
+       - 配置方式兩種：
+           自動分配 → 取顯示中的前 N 檔，按獲利可能性分數比例拆分預算
+           自己挑   → 只在你點過「選入」的標的之間平均分配
+       - 單一標的上限 MAX_POS%（自動模式；只選 1 檔時放寬）
+       - 金額換算成張數（1000 股），不足一張時改算零股
+       - 預算、模式、檔數、類別、選入清單都存在手機本機，開啟時自動還原
+         （選入清單綁當日交易日，換一天的資料就自動清空，避免對到昨天的標的）
+  ------------------------------------------------------------------------- */
+  var TRADE_DATE = "{{ meta.trade_date }}";
+  var MAX_POS = {{ max_position_pct }} / 100;
+  var ODD_LOT = {{ 'true' if allow_odd_lot else 'false' }};
+  var HIDE_UNAFFORDABLE = {{ 'true' if hide_unaffordable else 'false' }};
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll("details.card"));
+  var budgetInput = document.getElementById("budget-input");
+  var clearBtn = document.getElementById("budget-clear");
+  var resultEl = document.getElementById("budget-result");
+  var countEl = document.getElementById("band-count");
+  var emptyEl = document.getElementById("band-empty");
+  var splitsLabel = document.getElementById("splits-label");
+  var pickCountEl = document.getElementById("pick-count");
+  var pickClearBtn = document.getElementById("pick-clear");
+  var presets = Array.prototype.slice.call(document.querySelectorAll(".preset"));
+  var splitBtns = Array.prototype.slice.call(document.querySelectorAll(".split"));
+  var modeBtns = Array.prototype.slice.call(document.querySelectorAll(".mode-btn"));
+  var typeBtns = Array.prototype.slice.call(document.querySelectorAll(".type-btn"));
+  var pickBtns = Array.prototype.slice.call(document.querySelectorAll("[data-pick]"));
+
+  var INITIAL_VISIBLE = {{ initial_visible }};
+  var moreBtn = document.getElementById("show-more");
+  var st = { budget: 0, splits: {{ default_splits }}, mode: "auto", type: "all",
+             picks: [], limit: INITIAL_VISIBLE, q: "" };
+
+  function money(n) { return "NT$" + Math.round(n).toLocaleString("en-US"); }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  function press(list, attr, value) {
+    list.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset[attr] === value ? "true" : "false");
+    });
+  }
+
+  /* ---- 決定哪些卡片看得到：類別 + 買不買得起 ------------------------------
+     重點：篩選只決定「看不看得到」，不會重新編號。
+     卡片上的名次是掃描池的完整排名，所以切到 ETF 時第一筆可能是第 47 名，
+     那就顯示 47。清單一次先出 INITIAL_VISIBLE 筆，其餘按「顯示更多」展開。
+  ------------------------------------------------------------------------- */
+  function visible() {
+    var matched = [], shown = [];
+    cards.forEach(function (c) {
+      var okType = st.type === "all" || c.dataset.type === st.type;
+      var lot = parseInt(c.dataset.lot, 10) || 0;
+      var okBudget = !st.budget || !HIDE_UNAFFORDABLE || lot <= st.budget;
+      // 搜尋：比對代號、名稱與產業標籤
+      var okFind = true;
+      if (st.q) {
+        var sec = c.querySelector(".sector");
+        var hay = (c.dataset.code + " " + (c.dataset.name || "") + " " +
+                   (sec ? sec.textContent : "")).toLowerCase();
+        okFind = hay.indexOf(st.q) >= 0;
+      }
+      if (okType && okBudget && okFind) matched.push(c);
+      else { c.style.display = "none"; c.open = false; }
+    });
+    matched.forEach(function (c, i) {
+      var on = i < st.limit;
+      c.style.display = on ? "" : "none";
+      if (!on) c.open = false;
+      if (on) shown.push(c);
+    });
+
+    if (moreBtn) {
+      var rest = matched.length - shown.length;
+      moreBtn.hidden = rest <= 0;
+      moreBtn.textContent = "顯示更多（還有 " + rest + " 檔）";
+    }
+    // 配置一律以符合條件的完整清單為準，不受「顯示更多」影響
+    return { matched: matched, shown: shown };
+  }
+
+  /* ---- 計算每檔要投入多少 ---- */
+  function allocate(shown) {
+    // 先清空所有配置欄位
+    cards.forEach(function (c) {
+      var el = c.querySelector("[data-alloc]");
+      if (el) { el.hidden = true; el.innerHTML = ""; }
+    });
+
+    var picks;
+    if (st.mode === "pick") {
+      picks = shown.filter(function (c) { return st.picks.indexOf(c.dataset.code) >= 0; });
+    } else {
+      picks = shown.slice(0, st.splits);
+    }
+
+    if (!st.budget || st.budget <= 0) {
+      resultEl.classList.add("show");
+      resultEl.innerHTML = "填入本週預算，就會算出每一檔要投入多少，並自動隱藏買不起的標的。";
+      return;
+    }
+    if (!picks.length) {
+      resultEl.classList.add("show");
+      resultEl.innerHTML = st.mode === "pick"
+        ? "還沒挑任何標的。點卡片上的「＋ 選入」把想買的加進來。"
+        : "目前的條件下沒有標的可以配置。";
+      return;
+    }
+
+    // 自動：按分數比例並套上限；自己挑：平均分配（你既然自己選了，就等權對待）
+    var targets;
+    if (st.mode === "pick") {
+      targets = picks.map(function () { return st.budget / picks.length; });
+    } else {
+      var scores = picks.map(function (c) { return Math.max(parseFloat(c.dataset.score) || 0, 1); });
+      var total = scores.reduce(function (a, b) { return a + b; }, 0);
+      var cap = st.budget * Math.max(MAX_POS, 1 / picks.length);
+      targets = scores.map(function (x) { return st.budget * x / total; });
+
+      var overflow = 0, room = [];
+      targets.forEach(function (t, i) {
+        if (t > cap) { overflow += t - cap; targets[i] = cap; } else { room.push(i); }
+      });
+      while (overflow > 1 && room.length) {   // 超過上限的部分退回去分給其他檔
+        var share = overflow / room.length, next = [];
+        overflow = 0;
+        room.forEach(function (i) {
+          var t = targets[i] + share;
+          if (t > cap) { overflow += t - cap; targets[i] = cap; } else { targets[i] = t; next.push(i); }
+        });
+        room = next;
+      }
+    }
+
+    var used = 0, filled = 0;
+    picks.forEach(function (c, i) {
+      var price = parseFloat(c.dataset.price) || 0;
+      var lotCost = parseFloat(c.dataset.lot) || price * 1000;
+      var target = targets[i];
+      var lots = Math.floor(target / lotCost);
+      var amount = 0, unit = "", qty = 0;
+
+      if (lots >= 1) {
+        amount = lots * lotCost;
+        unit = lots + " 張";
+        qty = lots * 1000;                       // 台股 1 張 = 1000 股
+      } else if (ODD_LOT) {
+        var shares = Math.floor(target / price);
+        if (shares >= 1) { amount = shares * price; unit = "零股 " + shares + " 股"; qty = shares; }
+      }
+
+      var el = c.querySelector("[data-alloc]");
+      if (!el) return;
+      el.hidden = false;
+      if (amount > 0) {
+        used += amount; filled++;
+        el.innerHTML = "本週配置 <b>" + money(amount) + "</b> · " + unit +
+          ' <span class="sub">（目標 ' + money(target) + "）</span>" +
+          pnlLine(c, qty);
+      } else {
+        el.innerHTML = '<span class="sub">分到的 ' + money(target) +
+          " 不夠買進最小單位（一股 " + money(price) + "）</span>";
+      }
+    });
+
+    resultEl.classList.add("show");
+    resultEl.innerHTML =
+      (st.mode === "pick" ? "自己挑的 " : "自動分配到前 ") + picks.length + " 檔，" +
+      "預算 <b>" + money(st.budget) + "</b>，實際可投入 <b>" + money(used) + "</b>" +
+      (filled < picks.length ? "（其中 " + (picks.length - filled) + " 檔金額不足）" : "") +
+      "，剩餘現金 " + money(st.budget - used) + "。";
+  }
+
+  /* ---- 依建議張數換算風險與目標金額（只是把價差乘上股數，不動任何計算邏輯）---- */
+  function pnlLine(card, qty) {
+    if (!qty || qty <= 0) return "";
+    var trig = parseFloat(card.dataset.trigger);
+    var stop = parseFloat(card.dataset.stop);
+    var t1 = parseFloat(card.dataset.t1);
+    var t2 = parseFloat(card.dataset.t2);
+    // 價格資料不齊就整段不顯示，不要秀出半套數字
+    if (![trig, stop, t1, t2].every(function (v) { return isFinite(v) && v > 0; })) return "";
+
+    var risk = (trig - stop) * qty;
+    var g1 = (t1 - trig) * qty;
+    var g2 = (t2 - trig) * qty;
+    if (!(risk > 0) || !(g1 > 0) || !(g2 > 0)) return "";
+
+    return '<div class="pnl-line">' +
+           '<i>風險 <b class="down">' + money(risk) + "</b></i>" +
+           '<i>目標① <b class="up">+' + money(g1) + "</b></i>" +
+           '<i>目標② <b class="up">+' + money(g2) + "</b></i></div>";
+  }
+
+  /* ---- 重畫全部 ---- */
+  function render() {
+    press(modeBtns, "mode", st.mode);
+    press(typeBtns, "type", st.type);
+    press(splitBtns, "n", String(st.splits));
+
+    // 自己挑模式下，「分散成 N」不適用，淡化但不移除，避免版面跳動
+    var dim = st.mode === "pick";
+    if (splitsLabel) splitsLabel.classList.toggle("dim", dim);
+    splitBtns.forEach(function (b) { b.disabled = dim; b.style.opacity = dim ? ".35" : ""; });
+    if (pickClearBtn) pickClearBtn.hidden = !st.picks.length;
+    if (pickCountEl) pickCountEl.textContent = st.picks.length ? " " + st.picks.length : "";
+
+    pickBtns.forEach(function (b) {
+      var on = st.picks.indexOf(b.dataset.code) >= 0;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.textContent = on ? "✓ 已選入" : "＋ 選入";
+    });
+
+    var v = visible();
+    if (countEl) {
+      var bits = [];
+      if (st.budget) bits.push("預算 " + money(st.budget) + " 買得起");
+      if (st.type !== "all") {
+        bits.push({ tech: "電子科技", etf: "ETF", other: "其他" }[st.type]);
+      }
+      if (st.q) bits.push("搜尋「" + st.q + "」");
+      var head = bits.length ? bits.join("、") + "：" : "全部：";
+      var tail = v.matched.length + " 檔（掃描 " + cards.length + " 檔）";
+      var best = v.matched.length ? "，最佳名次第 " + v.matched[0].dataset.rank + " 名" : "";
+      countEl.textContent = head + tail + best;
+    }
+    if (emptyEl) emptyEl.style.display = v.matched.length ? "none" : "block";
+
+    allocate(v.matched);
+
+    save("budget", String(st.budget || ""));
+    save("splits", String(st.splits));
+    save("mode", st.mode);
+    save("type", st.type);
+    save("picks", JSON.stringify({ date: TRADE_DATE, codes: st.picks }));
+  }
+
+  /* ---- 事件 ---- */
+  budgetInput.addEventListener("input", function () {
+    st.budget = parseFloat(budgetInput.value) || 0;
+    st.limit = INITIAL_VISIBLE;
+    render();
+  });
+  clearBtn.addEventListener("click", function () {
+    budgetInput.value = ""; st.budget = 0; st.limit = INITIAL_VISIBLE; render();
+  });
+  presets.forEach(function (b) {
+    b.addEventListener("click", function () {
+      st.budget = parseInt(b.dataset.amt, 10) || 0;
+      budgetInput.value = st.budget;
+      st.limit = INITIAL_VISIBLE;
+      render();
+    });
+  });
+  splitBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      st.splits = parseInt(b.dataset.n, 10) || 3;
+      st.mode = "auto";
+      render();
+    });
+  });
+  modeBtns.forEach(function (b) {
+    b.addEventListener("click", function () { st.mode = b.dataset.mode; render(); });
+  });
+  var findEl = document.getElementById("find-q");
+  var findClear = document.getElementById("find-clear");
+  if (findEl) findEl.addEventListener("input", function () {
+    st.q = findEl.value.trim().toLowerCase();
+    st.limit = st.q ? cards.length : INITIAL_VISIBLE;   // 搜尋時一次找完，不用按「顯示更多」
+    render();
+  });
+  if (findClear) findClear.addEventListener("click", function () {
+    if (findEl) findEl.value = "";
+    st.q = ""; st.limit = INITIAL_VISIBLE; render();
+  });
+
+  typeBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      st.type = b.dataset.type; st.limit = INITIAL_VISIBLE; render();
+    });
+  });
+  pickClearBtn.addEventListener("click", function () {
+    st.picks = []; st.mode = "auto"; render();
+  });
+  pickBtns.forEach(function (b) {
+    b.addEventListener("click", function (e) {
+      // 按鈕在 <summary> 裡面，不擋住的話會順便把卡片展開
+      e.preventDefault(); e.stopPropagation();
+      var code = b.dataset.code;
+      var i = st.picks.indexOf(code);
+      if (i >= 0) st.picks.splice(i, 1); else st.picks.push(code);
+      st.mode = st.picks.length ? "pick" : "auto";   // 選了就自動切到自己挑
+      render();
+    });
+  });
+
+  if (moreBtn) {
+    moreBtn.addEventListener("click", function () {
+      st.limit += INITIAL_VISIBLE;
+      render();
+      moreBtn.scrollIntoView({ block: "center", behavior: "smooth" });
+    });
+  }
+
+  /* ---- 還原上次的設定 ---- */
+  var savedBudget = load("budget");
+  if (savedBudget) { st.budget = parseFloat(savedBudget) || 0; budgetInput.value = savedBudget; }
+  var savedSplits = parseInt(load("splits"), 10);
+  if (savedSplits) st.splits = savedSplits;
+  var savedMode = load("mode");
+  if (savedMode === "auto" || savedMode === "pick") st.mode = savedMode;
+  var savedType = load("type");
+  if (savedType) st.type = savedType;
+  try {
+    var pk = JSON.parse(load("picks") || "{}");
+    // 只還原同一個交易日的選擇，換一天就重來
+    if (pk && pk.date === TRADE_DATE && Array.isArray(pk.codes)) st.picks = pk.codes;
+  } catch (e) {}
+  if (!st.picks.length && st.mode === "pick") st.mode = "auto";
+
+  /* ---- 卡片展開時才畫迷你價量圖（原生 SVG，沒有引入圖表套件）
+         70 張卡片一次全畫會拖慢手機，所以等使用者真的展開再畫，而且只畫一次。 ---- */
+  function drawSpark(box) {
+    if (!box || box.dataset.done) return;
+    var d;
+    try { d = JSON.parse(box.dataset.spark || "{}"); } catch (e) { return; }
+    var c = d.c || [], v = d.v || [];
+    if (c.length < 5) { box.remove(); return; }
+
+    var W = 320, H = 88, PAD = 4, VH = 22;          // 下方 VH 高度留給成交量
+    var lo = Math.min.apply(null, c), hi = Math.max.apply(null, c);
+    if (hi - lo < 1e-9) { hi += 1; lo -= 1; }
+    var vmax = Math.max.apply(null, v) || 1;
+    var n = c.length;
+    var sx = function (i) { return PAD + i * (W - PAD * 2) / (n - 1); };
+    var sy = function (p) { return PAD + (hi - p) * (H - VH - PAD * 2) / (hi - lo); };
+
+    var pts = c.map(function (p, i) { return sx(i).toFixed(1) + "," + sy(p).toFixed(1); });
+    var area = "M" + pts[0] + "L" + pts.slice(1).join("L") +
+               "L" + sx(n - 1).toFixed(1) + "," + (H - VH).toFixed(1) +
+               "L" + sx(0).toFixed(1) + "," + (H - VH).toFixed(1) + "Z";
+
+    var bw = Math.max(1.2, (W - PAD * 2) / n * 0.62);
+    var bars = v.map(function (x, i) {
+      var h = Math.max(1, x / vmax * (VH - 3));
+      var up = i > 0 && c[i] >= c[i - 1];
+      return '<rect class="' + (up ? "up" : "") + '" x="' + (sx(i) - bw / 2).toFixed(1) +
+             '" y="' + (H - h).toFixed(1) + '" width="' + bw.toFixed(1) +
+             '" height="' + h.toFixed(1) + '"></rect>';
+    }).join("");
+
+    box.innerHTML =
+      '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" role="img" ' +
+        'aria-label="最近 ' + n + ' 個交易日的收盤與成交量走勢">' +
+        '<path class="pxa" d="' + area + '"></path>' +
+        '<polyline class="px" points="' + pts.join(" ") + '"></polyline>' +
+        '<g class="vol">' + bars + "</g></svg>" +
+      '<div class="spark-cap"><span>最近 ' + n + ' 個交易日</span>' +
+        "<span>區間 " + lo.toFixed(2) + " ～ " + hi.toFixed(2) + "</span>" +
+        "<span>下方長條為成交量</span></div>";
+    box.dataset.done = "1";
+  }
+
+  cards.forEach(function (card) {
+    card.addEventListener("toggle", function () {
+      if (card.open) drawSpark(card.querySelector("[data-spark]"));
+    });
+  });
+
+  render();
+})();
+</script>
+
+
+
+
+<script id="px-data" type="application/json" data-date="{{ meta.trade_date }}">{{ price_map_json|safe }}</script>
+<script src="journal.js" defer></script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
- "cash": 9.989624999987427,
+ "cash": 32621.57875499999,
  "positions": [
   {
    "code": "2880",
@@ -7,7 +7,7 @@
    "shares": 851,
    "entry": 39.15,
    "entry_date": "2026-08-26",
-   "held": 2,
+   "held": 3,
    "stop": 37.86,
    "target1": 42.4,
    "pattern": "低檔止跌轉強"
@@ -18,25 +18,35 @@
    "shares": 380,
    "entry": 87.7,
    "entry_date": "2026-08-26",
-   "held": 2,
+   "held": 3,
    "stop": 85.1,
    "target1": 94.11,
    "pattern": "低檔止跌轉強"
-  },
+  }
+ ],
+ "pending": [
+  {
+   "code": "2327",
+   "budget": 32621.58,
+   "stop": 553.54,
+   "target1": 668.0,
+   "pattern": "區間整理"
+  }
+ ],
+ "trades": [
   {
    "code": "2845",
    "name": "遠東銀",
-   "shares": 2441,
-   "entry": 13.6,
    "entry_date": "2026-08-26",
-   "held": 2,
-   "stop": 13.38,
-   "target1": 14.0,
+   "exit_date": "2026-08-31",
+   "entry": 13.6,
+   "exit": 13.38,
+   "net_pct": -1.92,
+   "reason": "停損",
+   "held": 3,
    "pattern": "多頭回檔"
   }
  ],
- "pending": [],
- "trades": [],
  "equity": [
   {
    "date": "2026-08-25",
@@ -57,8 +67,13 @@
    "date": "2026-08-28",
    "equity": 99312.29,
    "index": 45975.22
+  },
+  {
+   "date": "2026-08-31",
+   "equity": 99744.33,
+   "index": 46331.45
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-08-28"
+ "last_date": "2026-08-31"
 }

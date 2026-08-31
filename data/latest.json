@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-08-30 03:05",
-    "generated_iso": "2026-08-30T03:05:32+08:00",
-    "trade_date": "2026-08-30",
+    "generated_at": "2026-08-31 08:18",
+    "generated_iso": "2026-08-31T08:18:37+08:00",
+    "trade_date": "2026-08-31",
     "run_type": "morning",
     "data_date": "2026-08-28",
     "scanned_count": 157,
@@ -28,48 +28,48 @@
     "last_night": [
       {
         "label": "那斯達克",
-        "chg_pct": 1.57,
-        "date": "2026-08-27"
+        "chg_pct": -0.52,
+        "date": "2026-08-28"
       },
       {
         "label": "費城半導體",
-        "chg_pct": 2.33,
-        "date": "2026-08-27"
+        "chg_pct": -3.47,
+        "date": "2026-08-28"
       },
       {
         "label": "S&P 500",
-        "chg_pct": 0.72,
-        "date": "2026-08-27"
+        "chg_pct": -0.25,
+        "date": "2026-08-28"
       },
       {
         "label": "道瓊",
-        "chg_pct": 0.2,
-        "date": "2026-08-27"
+        "chg_pct": -0.02,
+        "date": "2026-08-28"
       }
     ],
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": NaN
+        "chg_pct": -0.6
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": NaN
+        "chg_pct": -0.4
       }
     ],
     "forecast": {
       "available": true,
-      "point": NaN,
-      "low": NaN,
-      "high": NaN,
-      "basis": "以那斯達克期貨 +nan% 代入",
+      "point": -0.23,
+      "low": -1.62,
+      "high": 1.16,
+      "basis": "以那斯達克期貨 -0.60% 代入",
       "r2": 0.328,
       "samples": 250
     },
     "model": {
       "samples": 250,
       "r2": 0.328,
-      "beta_nasdaq": 0.379,
+      "beta_nasdaq": 0.377,
       "beta_sox": 0.207,
       "resid_sd": 1.39
     }

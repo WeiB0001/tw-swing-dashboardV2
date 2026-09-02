@@ -1,5 +1,5 @@
 {
- "cash": 32382.35175499999,
+ "cash": 31065.764394999987,
  "positions": [
   {
    "code": "2880",
@@ -7,29 +7,29 @@
    "shares": 851,
    "entry": 39.15,
    "entry_date": "2026-08-26",
-   "held": 4,
+   "held": 5,
    "stop": 37.86,
    "target1": 42.4,
    "pattern": "低檔止跌轉強"
   },
   {
-   "code": "2327",
-   "name": "國巨*",
-   "shares": 56,
-   "entry": 580.0,
-   "entry_date": "2026-09-01",
+   "code": "3231",
+   "name": "緯創",
+   "shares": 180,
+   "entry": 179.0,
+   "entry_date": "2026-09-02",
    "held": 0,
-   "stop": 553.54,
-   "target1": 668.0,
+   "stop": 169.76,
+   "target1": 193.77,
    "pattern": "區間整理"
   }
  ],
  "pending": [
   {
-   "code": "3231",
-   "budget": 32382.35,
-   "stop": 169.76,
-   "target1": 193.77,
+   "code": "2345",
+   "budget": 31065.76,
+   "stop": 2015.5,
+   "target1": 2448.9,
    "pattern": "區間整理"
   }
  ],
@@ -57,6 +57,18 @@
    "reason": "停損",
    "held": 4,
    "pattern": "低檔止跌轉強"
+  },
+  {
+   "code": "2327",
+   "name": "國巨*",
+   "entry_date": "2026-09-01",
+   "exit_date": "2026-09-02",
+   "entry": 580.0,
+   "exit": 553.54,
+   "net_pct": -4.86,
+   "reason": "停損",
+   "held": 1,
+   "pattern": "區間整理"
   }
  ],
  "equity": [
@@ -89,8 +101,13 @@
    "date": "2026-09-01",
    "equity": 98091.2,
    "index": 46128.47
+  },
+  {
+   "date": "2026-09-02",
+   "equity": 99525.21,
+   "index": 46164.71875
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-01"
+ "last_date": "2026-09-02"
 }

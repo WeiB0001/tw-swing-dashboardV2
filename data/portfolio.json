@@ -1,35 +1,35 @@
 {
- "cash": 37018.99579499999,
+ "cash": 34829.83789499999,
  "positions": [
-  {
-   "code": "3231",
-   "name": "緯創",
-   "shares": 180,
-   "entry": 179.0,
-   "entry_date": "2026-09-02",
-   "held": 1,
-   "stop": 169.76,
-   "target1": 193.77,
-   "pattern": "區間整理"
-  },
   {
    "code": "2345",
    "name": "智邦",
    "shares": 14,
    "entry": 2145.0,
    "entry_date": "2026-09-03",
-   "held": 0,
+   "held": 1,
    "stop": 2015.5,
    "target1": 2448.9,
+   "pattern": "區間整理"
+  },
+  {
+   "code": "6005",
+   "name": "群益證",
+   "shares": 1155,
+   "entry": 32.0,
+   "entry_date": "2026-09-04",
+   "held": 0,
+   "stop": 31.14,
+   "target1": 33.48,
    "pattern": "區間整理"
   }
  ],
  "pending": [
   {
-   "code": "6005",
-   "budget": 37019.0,
-   "stop": 31.14,
-   "target1": 33.48,
+   "code": "2377",
+   "budget": 34829.84,
+   "stop": 141.0,
+   "target1": 172.65,
    "pattern": "區間整理"
   }
  ],
@@ -81,6 +81,18 @@
    "reason": "達標",
    "held": 6,
    "pattern": "低檔止跌轉強"
+  },
+  {
+   "code": "3231",
+   "name": "緯創",
+   "entry_date": "2026-09-02",
+   "exit_date": "2026-09-04",
+   "entry": 179.0,
+   "exit": 193.77,
+   "net_pct": 7.95,
+   "reason": "達標",
+   "held": 2,
+   "pattern": "區間整理"
   }
  ],
  "equity": [
@@ -123,8 +135,13 @@
    "date": "2026-09-03",
    "equity": 100369.0,
    "index": 46164.72
+  },
+  {
+   "date": "2026-09-04",
+   "equity": 101454.09,
+   "index": 45857.66
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-03"
+ "last_date": "2026-09-04"
 }

@@ -1,5 +1,5 @@
 {
- "cash": 34829.83789499999,
+ "cash": 46.74139499999001,
  "positions": [
   {
    "code": "2345",
@@ -7,7 +7,7 @@
    "shares": 14,
    "entry": 2145.0,
    "entry_date": "2026-09-03",
-   "held": 1,
+   "held": 2,
    "stop": 2015.5,
    "target1": 2448.9,
    "pattern": "區間整理"
@@ -18,21 +18,24 @@
    "shares": 1155,
    "entry": 32.0,
    "entry_date": "2026-09-04",
-   "held": 0,
+   "held": 1,
    "stop": 31.14,
    "target1": 33.48,
    "pattern": "區間整理"
-  }
- ],
- "pending": [
+  },
   {
    "code": "2377",
-   "budget": 34829.84,
+   "name": "微星",
+   "shares": 227,
+   "entry": 153.0,
+   "entry_date": "2026-09-07",
+   "held": 0,
    "stop": 141.0,
    "target1": 172.65,
    "pattern": "區間整理"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -140,8 +143,13 @@
    "date": "2026-09-04",
    "equity": 101454.09,
    "index": 45857.66
+  },
+  {
+   "date": "2026-09-07",
+   "equity": 103933.49,
+   "index": 46551.13
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-04"
+ "last_date": "2026-09-07"
 }

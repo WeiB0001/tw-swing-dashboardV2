@@ -1,24 +1,13 @@
 {
- "cash": 46.74139499999001,
+ "cash": 28221.41589499999,
  "positions": [
-  {
-   "code": "2345",
-   "name": "智邦",
-   "shares": 14,
-   "entry": 2145.0,
-   "entry_date": "2026-09-03",
-   "held": 3,
-   "stop": 2015.5,
-   "target1": 2448.9,
-   "pattern": "區間整理"
-  },
   {
    "code": "6005",
    "name": "群益證",
    "shares": 1155,
    "entry": 32.0,
    "entry_date": "2026-09-04",
-   "held": 2,
+   "held": 3,
    "stop": 31.14,
    "target1": 33.48,
    "pattern": "區間整理"
@@ -29,13 +18,21 @@
    "shares": 227,
    "entry": 153.0,
    "entry_date": "2026-09-07",
-   "held": 1,
+   "held": 2,
    "stop": 141.0,
    "target1": 172.65,
    "pattern": "區間整理"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "6770",
+   "budget": 28221.42,
+   "stop": 68.35,
+   "target1": 81.58,
+   "pattern": "低檔止跌轉強"
+  }
+ ],
  "trades": [
   {
    "code": "2845",
@@ -96,6 +93,18 @@
    "reason": "達標",
    "held": 2,
    "pattern": "區間整理"
+  },
+  {
+   "code": "2345",
+   "name": "智邦",
+   "entry_date": "2026-09-03",
+   "exit_date": "2026-09-09",
+   "entry": 2145.0,
+   "exit": 2015.5,
+   "net_pct": -6.34,
+   "reason": "停損",
+   "held": 4,
+   "pattern": "區間整理"
   }
  ],
  "equity": [
@@ -153,8 +162,13 @@
    "date": "2026-09-08",
    "equity": 103194.74,
    "index": 47326.27
+  },
+  {
+   "date": "2026-09-09",
+   "equity": 100549.67,
+   "index": 47105.78
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-08"
+ "last_date": "2026-09-09"
 }

@@ -1,5 +1,5 @@
 {
- "cash": 28221.41589499999,
+ "cash": 5.555494999989605,
  "positions": [
   {
    "code": "6005",
@@ -7,7 +7,7 @@
    "shares": 1155,
    "entry": 32.0,
    "entry_date": "2026-09-04",
-   "held": 3,
+   "held": 4,
    "stop": 31.14,
    "target1": 33.48,
    "pattern": "區間整理"
@@ -18,21 +18,24 @@
    "shares": 227,
    "entry": 153.0,
    "entry_date": "2026-09-07",
-   "held": 2,
+   "held": 3,
    "stop": 141.0,
    "target1": 172.65,
    "pattern": "區間整理"
-  }
- ],
- "pending": [
+  },
   {
    "code": "6770",
-   "budget": 28221.42,
+   "name": "力積電",
+   "shares": 387,
+   "entry": 72.8,
+   "entry_date": "2026-09-10",
+   "held": 0,
    "stop": 68.35,
    "target1": 81.58,
    "pattern": "低檔止跌轉強"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -167,8 +170,13 @@
    "date": "2026-09-09",
    "equity": 100549.67,
    "index": 47105.78
+  },
+  {
+   "date": "2026-09-10",
+   "equity": 100740.86,
+   "index": 47183.36
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-09"
+ "last_date": "2026-09-10"
 }

@@ -7,7 +7,7 @@
    "shares": 1155,
    "entry": 32.0,
    "entry_date": "2026-09-04",
-   "held": 4,
+   "held": 5,
    "stop": 31.14,
    "target1": 33.48,
    "pattern": "區間整理"
@@ -18,7 +18,7 @@
    "shares": 227,
    "entry": 153.0,
    "entry_date": "2026-09-07",
-   "held": 3,
+   "held": 4,
    "stop": 141.0,
    "target1": 172.65,
    "pattern": "區間整理"
@@ -29,7 +29,7 @@
    "shares": 387,
    "entry": 72.8,
    "entry_date": "2026-09-10",
-   "held": 0,
+   "held": 1,
    "stop": 68.35,
    "target1": 81.58,
    "pattern": "低檔止跌轉強"
@@ -175,8 +175,13 @@
    "date": "2026-09-10",
    "equity": 100740.86,
    "index": 47183.36
+  },
+  {
+   "date": "2026-09-11",
+   "equity": 98771.06,
+   "index": 46940.49
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-10"
+ "last_date": "2026-09-11"
 }

@@ -1,24 +1,13 @@
 {
- "cash": 5.555494999989605,
+ "cash": 35918.30544499999,
  "positions": [
-  {
-   "code": "6005",
-   "name": "群益證",
-   "shares": 1155,
-   "entry": 32.0,
-   "entry_date": "2026-09-04",
-   "held": 5,
-   "stop": 31.14,
-   "target1": 33.48,
-   "pattern": "區間整理"
-  },
   {
    "code": "2377",
    "name": "微星",
    "shares": 227,
    "entry": 153.0,
    "entry_date": "2026-09-07",
-   "held": 4,
+   "held": 5,
    "stop": 141.0,
    "target1": 172.65,
    "pattern": "區間整理"
@@ -29,13 +18,21 @@
    "shares": 387,
    "entry": 72.8,
    "entry_date": "2026-09-10",
-   "held": 1,
+   "held": 2,
    "stop": 68.35,
    "target1": 81.58,
    "pattern": "低檔止跌轉強"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "2317",
+   "budget": 35918.31,
+   "stop": 238.0,
+   "target1": 259.0,
+   "pattern": "區間整理"
+  }
+ ],
  "trades": [
   {
    "code": "2845",
@@ -107,6 +104,18 @@
    "net_pct": -6.34,
    "reason": "停損",
    "held": 4,
+   "pattern": "區間整理"
+  },
+  {
+   "code": "6005",
+   "name": "群益證",
+   "entry_date": "2026-09-04",
+   "exit_date": "2026-09-14",
+   "entry": 32.0,
+   "exit": 31.14,
+   "net_pct": -2.99,
+   "reason": "停損",
+   "held": 6,
    "pattern": "區間整理"
   }
  ],
@@ -180,8 +189,13 @@
    "date": "2026-09-11",
    "equity": 98771.06,
    "index": 46940.49
+  },
+  {
+   "date": "2026-09-14",
+   "equity": 97102.21,
+   "index": 46184.85
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-11"
+ "last_date": "2026-09-14"
 }

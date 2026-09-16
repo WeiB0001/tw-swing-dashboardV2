@@ -7,7 +7,7 @@
    "shares": 227,
    "entry": 153.0,
    "entry_date": "2026-09-07",
-   "held": 6,
+   "held": 7,
    "stop": 141.0,
    "target1": 172.65,
    "pattern": "區間整理"
@@ -18,7 +18,7 @@
    "shares": 146,
    "entry": 244.5,
    "entry_date": "2026-09-15",
-   "held": 0,
+   "held": 1,
    "stop": 238.0,
    "target1": 259.0,
    "pattern": "區間整理"
@@ -26,11 +26,11 @@
  ],
  "pending": [
   {
-   "code": "3029",
+   "code": "6213",
    "budget": 26579.53,
-   "stop": 112.15,
-   "target1": 128.61,
-   "pattern": "多頭回檔"
+   "stop": 482.0,
+   "target1": 584.0,
+   "pattern": "低檔止跌轉強"
   }
  ],
  "trades": [
@@ -211,8 +211,13 @@
    "date": "2026-09-15",
    "equity": 97024.03,
    "index": 45862.52
+  },
+  {
+   "date": "2026-09-16",
+   "equity": 96164.53,
+   "index": 45511.49
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-15"
+ "last_date": "2026-09-16"
 }

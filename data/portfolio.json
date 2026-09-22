@@ -1,5 +1,5 @@
 {
- "cash": 35422.380269999994,
+ "cash": 3048.8927699999913,
  "positions": [
   {
    "code": "2317",
@@ -7,7 +7,7 @@
    "shares": 146,
    "entry": 244.5,
    "entry_date": "2026-09-15",
-   "held": 4,
+   "held": 5,
    "stop": 238.0,
    "target1": 259.0,
    "pattern": "區間整理"
@@ -18,21 +18,24 @@
    "shares": 50,
    "entry": 525.0,
    "entry_date": "2026-09-17",
-   "held": 2,
+   "held": 3,
    "stop": 482.0,
    "target1": 584.0,
    "pattern": "低檔止跌轉強"
-  }
- ],
- "pending": [
+  },
   {
    "code": "3008",
-   "budget": 35422.38,
+   "name": "大立光",
+   "shares": 5,
+   "entry": 6465.0,
+   "entry_date": "2026-09-22",
+   "held": 0,
    "stop": 5930.0,
    "target1": 7156.81,
    "pattern": "區間整理"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -243,8 +246,13 @@
    "date": "2026-09-21",
    "equity": 97245.38,
    "index": 47180.75
+  },
+  {
+   "date": "2026-09-22",
+   "equity": 98648.89,
+   "index": 47718.84
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-21"
+ "last_date": "2026-09-22"
 }

@@ -670,19 +670,20 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       </div>
       <div class="us-grid us-sub">
         <div><span>那斯達克期貨（此刻）</span>
-          <b class="down">-0.22%</b></div>
+          <b class="up">+0.43%</b></div>
         <div><span>S&P 500 期貨（此刻）</span>
-          <b class="down">-0.26%</b></div>
+          <b class="up">+0.28%</b></div>
       </div>
 
       <div class="us-fc">
-<b class="lamp side">🟡 海外環境中性</b>        <div class="us-fine mono">中央估計 +0.02%
-          · 區間 -1.37% ～ +1.40%
-          · R² 0.33 · N 250</div>
+<b class="lamp bull">🟢 海外環境偏多</b>
+        <div class="us-fine mono">中央估計 +0.43%
+          · 區間 -0.96% ～ +1.82%
+          · R² 0.327 · N 250</div>
       </div>
       <p class="us-note">
         這是「台股當日漲跌 ≈ a + b×前夜那斯達克 + c×前夜費半」的迴歸外推，
-        用現在的美股期貨代替今晚尚未發生的美股。R² 0.33 代表美股只能解釋台股約
+        用現在的美股期貨代替今晚尚未發生的美股。R² 0.327 代表美股只能解釋台股約
         33% 的波動，其餘來自台股自身的籌碼與消息面。
         <b>這是統計相關性，不是預測，更不是投資建議。</b>
         個股排名以大盤狀態與歷史期望值為準，這個燈號不參與排序。
@@ -692,10 +693,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     <div class="refresh-msg" id="refresh-msg" hidden></div>
     <div class="stamp">
-      <span id="freshness">更新時間 <b class="mono">2026-09-25 08:21</b></span>
+      <span id="freshness">更新時間 <b class="mono">2026-09-25 21:15</b></span>
       <span>行情資料日 <b class="mono">2026-09-24</b></span>
-      <span>06:00 海外盤更新
-        <b class="mono">2026-09-25 08:21</b></span>
+      <span>16:00 收盤更新
+        <b class="mono">2026-09-25 21:15</b></span>
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
       <span>掃描 <b class="mono">161</b> 檔</span>
     </div>
@@ -34379,7 +34380,7 @@ data-trigger="16.87" data-stop="15.82" data-t1="17.42" data-t2="17.78" data-type
 
   <footer>
     台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
-    <span class="mono">2026-09-25 08:21</span>
+    <span class="mono">2026-09-25 21:15</span>
   </footer>
 </div>
 
@@ -34390,7 +34391,7 @@ data-trigger="16.87" data-stop="15.82" data-t1="17.42" data-t2="17.78" data-type
 (function () {
   "use strict";
 
-  var GENERATED = "2026-09-25T08:21:48+08:00";
+  var GENERATED = "2026-09-25T21:15:01+08:00";
   var TRADE_DATE = "2026-09-25";
 
   /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
@@ -34411,7 +34412,7 @@ data-trigger="16.87" data-stop="15.82" data-t1="17.42" data-t2="17.78" data-type
     else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
     else word = Math.floor(mins / 1440) + " 天前更新";
     freshness.innerHTML = '<b>' + word + '</b>';
-    freshness.title = "更新時間 2026-09-25 08:21";
+    freshness.title = "更新時間 2026-09-25 21:15";
   }
   renderFreshness();
   setInterval(renderFreshness, 60000);
@@ -34434,7 +34435,7 @@ data-trigger="16.87" data-stop="15.82" data-t1="17.42" data-t2="17.78" data-type
      ---------------------------------------------------------------------- */
   var refreshBtn = document.getElementById("btn-refresh");
   var refreshMsg = document.getElementById("refresh-msg");
-  var CURRENT_STAMP = "2026-09-25 08:21";
+  var CURRENT_STAMP = "2026-09-25 21:15";
 
   function showMsg(text, isNew) {
     if (!refreshMsg) return;

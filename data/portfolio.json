@@ -1,5 +1,5 @@
 {
- "cash": 3048.8927699999913,
+ "cash": 32205.092769999992,
  "positions": [
   {
    "code": "2317",
@@ -7,21 +7,10 @@
    "shares": 146,
    "entry": 244.5,
    "entry_date": "2026-09-15",
-   "held": 7,
+   "held": 8,
    "stop": 238.0,
    "target1": 259.0,
    "pattern": "區間整理"
-  },
-  {
-   "code": "6213",
-   "name": "聯茂",
-   "shares": 50,
-   "entry": 525.0,
-   "entry_date": "2026-09-17",
-   "held": 5,
-   "stop": 482.0,
-   "target1": 584.0,
-   "pattern": "低檔止跌轉強"
   },
   {
    "code": "3008",
@@ -29,13 +18,21 @@
    "shares": 5,
    "entry": 6465.0,
    "entry_date": "2026-09-22",
-   "held": 2,
+   "held": 3,
    "stop": 5930.0,
    "target1": 7156.81,
    "pattern": "區間整理"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "2301",
+   "budget": 32205.09,
+   "stop": 271.0,
+   "target1": 308.93,
+   "pattern": "區間整理"
+  }
+ ],
  "trades": [
   {
    "code": "2845",
@@ -144,6 +141,18 @@
    "reason": "持有到期",
    "held": 10,
    "pattern": "區間整理"
+  },
+  {
+   "code": "6213",
+   "name": "聯茂",
+   "entry_date": "2026-09-17",
+   "exit_date": "2026-09-29",
+   "entry": 525.0,
+   "exit": 584.0,
+   "net_pct": 10.94,
+   "reason": "達標",
+   "held": 6,
+   "pattern": "低檔止跌轉強"
   }
  ],
  "equity": [
@@ -261,8 +270,13 @@
    "date": "2026-09-24",
    "equity": 98424.89,
    "index": 48157.29
+  },
+  {
+   "date": "2026-09-29",
+   "equity": 100003.09,
+   "index": 48024.6
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-24"
+ "last_date": "2026-09-29"
 }

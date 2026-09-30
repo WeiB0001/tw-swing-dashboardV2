@@ -1,5 +1,5 @@
 {
- "cash": 32205.092769999992,
+ "cash": 234.70901999999114,
  "positions": [
   {
    "code": "2317",
@@ -7,7 +7,7 @@
    "shares": 146,
    "entry": 244.5,
    "entry_date": "2026-09-15",
-   "held": 8,
+   "held": 9,
    "stop": 238.0,
    "target1": 259.0,
    "pattern": "區間整理"
@@ -18,21 +18,24 @@
    "shares": 5,
    "entry": 6465.0,
    "entry_date": "2026-09-22",
-   "held": 3,
+   "held": 4,
    "stop": 5930.0,
    "target1": 7156.81,
    "pattern": "區間整理"
-  }
- ],
- "pending": [
+  },
   {
    "code": "2301",
-   "budget": 32205.09,
+   "name": "光寶科",
+   "shares": 113,
+   "entry": 282.5,
+   "entry_date": "2026-09-30",
+   "held": 0,
    "stop": 271.0,
    "target1": 308.93,
    "pattern": "區間整理"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -275,8 +278,13 @@
    "date": "2026-09-29",
    "equity": 100003.09,
    "index": 48024.6
+  },
+  {
+   "date": "2026-09-30",
+   "equity": 98660.71,
+   "index": 47631.96
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-09-29"
+ "last_date": "2026-09-30"
 }

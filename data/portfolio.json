@@ -1,36 +1,36 @@
 {
- "cash": 36898.63051999999,
+ "cash": 29607.894019999992,
  "positions": [
-  {
-   "code": "3008",
-   "name": "大立光",
-   "shares": 5,
-   "entry": 6465.0,
-   "entry_date": "2026-09-22",
-   "held": 5,
-   "stop": 5930.0,
-   "target1": 7156.81,
-   "pattern": "區間整理"
-  },
   {
    "code": "2301",
    "name": "光寶科",
    "shares": 113,
    "entry": 282.5,
    "entry_date": "2026-09-30",
-   "held": 1,
+   "held": 2,
    "stop": 271.0,
    "target1": 308.93,
+   "pattern": "區間整理"
+  },
+  {
+   "code": "6269",
+   "name": "台郡",
+   "shares": 554,
+   "entry": 66.5,
+   "entry_date": "2026-10-02",
+   "held": 0,
+   "stop": 63.0,
+   "target1": 71.47,
    "pattern": "區間整理"
   }
  ],
  "pending": [
   {
-   "code": "6269",
-   "budget": 36898.63,
-   "stop": 63.0,
-   "target1": 71.47,
-   "pattern": "區間整理"
+   "code": "2464",
+   "budget": 29607.89,
+   "stop": 178.0,
+   "target1": 212.64,
+   "pattern": "低檔止跌轉強"
   }
  ],
  "trades": [
@@ -165,6 +165,18 @@
    "reason": "持有到期",
    "held": 10,
    "pattern": "區間整理"
+  },
+  {
+   "code": "3008",
+   "name": "大立光",
+   "entry_date": "2026-09-22",
+   "exit_date": "2026-10-02",
+   "entry": 6465.0,
+   "exit": 5930.0,
+   "net_pct": -8.58,
+   "reason": "停損",
+   "held": 6,
+   "pattern": "區間整理"
   }
  ],
  "equity": [
@@ -297,8 +309,13 @@
    "date": "2026-10-01",
    "equity": 98207.13,
    "index": 47940.13
+  },
+  {
+   "date": "2026-10-02",
+   "equity": 97766.39,
+   "index": 48475.73828125
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-01"
+ "last_date": "2026-10-02"
 }

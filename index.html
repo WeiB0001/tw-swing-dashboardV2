@@ -660,25 +660,25 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
       <h3>美股連動</h3>
       <div class="us-grid">
         <div><span>那斯達克</span>
-          <b class="down">-1.25%</b></div>
+          <b class="up">+0.41%</b></div>
         <div><span>費城半導體</span>
-          <b class="down">-3.39%</b></div>
+          <b class="down">-0.38%</b></div>
         <div><span>S&P 500</span>
-          <b class="down">-0.47%</b></div>
+          <b class="up">+0.37%</b></div>
         <div><span>道瓊</span>
-          <b class="up">+0.10%</b></div>
+          <b class="up">+0.42%</b></div>
       </div>
       <div class="us-grid us-sub">
         <div><span>那斯達克期貨（此刻）</span>
-          <b class="down">-1.13%</b></div>
+          <b class="up">+0.40%</b></div>
         <div><span>S&P 500 期貨（此刻）</span>
-          <b class="down">-0.27%</b></div>
+          <b class="up">+0.43%</b></div>
       </div>
 
       <div class="us-fc">
-<b class="lamp bear">🔴 海外環境偏空</b>
-        <div class="us-fine mono">中央估計 -0.56%
-          · 區間 -1.95% ～ +0.83%
+<b class="lamp bull">🟢 海外環境偏多</b>
+        <div class="us-fine mono">中央估計 +0.41%
+          · 區間 -0.98% ～ +1.80%
           · R² 0.331 · N 250</div>
       </div>
       <p class="us-note">
@@ -693,10 +693,10 @@ footer{text-align:center;font-size:11.5px;color:#5A6672;padding:8px 0 4px;line-h
 
     <div class="refresh-msg" id="refresh-msg" hidden></div>
     <div class="stamp">
-      <span id="freshness">更新時間 <b class="mono">2026-10-09 09:51</b></span>
+      <span id="freshness">更新時間 <b class="mono">2026-10-09 22:58</b></span>
       <span>行情資料日 <b class="mono">2026-10-08</b></span>
-      <span>06:00 海外盤更新
-        <b class="mono">2026-10-09 09:51</b></span>
+      <span>16:00 收盤更新
+        <b class="mono">2026-10-09 22:58</b></span>
       <button type="button" class="btn-refresh" id="btn-refresh">↻ 更新數據</button>
       <span>掃描 <b class="mono">163</b> 檔</span>
     </div>
@@ -34867,7 +34867,7 @@ data-trigger="195.02" data-stop="162.86" data-t1="203.27" data-t2="220.82" data-
 
   <footer>
     台股價差機會自動儀表板 · 每日收盤後由 GitHub Actions 自動更新<br>
-    <span class="mono">2026-10-09 09:51</span>
+    <span class="mono">2026-10-09 22:58</span>
   </footer>
 </div>
 
@@ -34878,7 +34878,7 @@ data-trigger="195.02" data-stop="162.86" data-t1="203.27" data-t2="220.82" data-
 (function () {
   "use strict";
 
-  var GENERATED = "2026-10-09T09:51:57+08:00";
+  var GENERATED = "2026-10-09T22:58:03+08:00";
   var TRADE_DATE = "2026-10-09";
 
   /* ---- 1) 註冊 service worker：離線可看、開啟秒開 ---- */
@@ -34899,7 +34899,7 @@ data-trigger="195.02" data-stop="162.86" data-t1="203.27" data-t2="220.82" data-
     else if (mins < 1440) word = Math.floor(mins / 60) + " 小時前更新";
     else word = Math.floor(mins / 1440) + " 天前更新";
     freshness.innerHTML = '<b>' + word + '</b>';
-    freshness.title = "更新時間 2026-10-09 09:51";
+    freshness.title = "更新時間 2026-10-09 22:58";
   }
   renderFreshness();
   setInterval(renderFreshness, 60000);
@@ -34922,7 +34922,7 @@ data-trigger="195.02" data-stop="162.86" data-t1="203.27" data-t2="220.82" data-
      ---------------------------------------------------------------------- */
   var refreshBtn = document.getElementById("btn-refresh");
   var refreshMsg = document.getElementById("refresh-msg");
-  var CURRENT_STAMP = "2026-10-09 09:51";
+  var CURRENT_STAMP = "2026-10-09 22:58";
 
   function showMsg(text, isNew) {
     if (!refreshMsg) return;

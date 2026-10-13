@@ -1,5 +1,5 @@
 {
- "cash": 194.3397699999914,
+ "cash": 35043.986769999996,
  "positions": [
   {
    "code": "2301",
@@ -7,20 +7,9 @@
    "shares": 113,
    "entry": 282.5,
    "entry_date": "2026-09-30",
-   "held": 7,
+   "held": 8,
    "stop": 271.0,
    "target1": 308.93,
-   "pattern": "區間整理"
-  },
-  {
-   "code": "6269",
-   "name": "台郡",
-   "shares": 554,
-   "entry": 66.5,
-   "entry_date": "2026-10-02",
-   "held": 5,
-   "stop": 63.0,
-   "target1": 71.47,
    "pattern": "區間整理"
   },
   {
@@ -29,13 +18,21 @@
    "shares": 151,
    "entry": 194.5,
    "entry_date": "2026-10-05",
-   "held": 4,
+   "held": 5,
    "stop": 178.0,
    "target1": 212.64,
    "pattern": "低檔止跌轉強"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "2049",
+   "budget": 35043.99,
+   "stop": 323.66,
+   "target1": 361.72,
+   "pattern": "區間整理"
+  }
+ ],
  "trades": [
   {
    "code": "2845",
@@ -177,6 +174,18 @@
    "entry": 6465.0,
    "exit": 5930.0,
    "net_pct": -8.58,
+   "reason": "停損",
+   "held": 6,
+   "pattern": "區間整理"
+  },
+  {
+   "code": "6269",
+   "name": "台郡",
+   "entry_date": "2026-10-02",
+   "exit_date": "2026-10-13",
+   "entry": 66.5,
+   "exit": 63.0,
+   "net_pct": -5.56,
    "reason": "停損",
    "held": 6,
    "pattern": "區間整理"
@@ -342,8 +351,13 @@
    "date": "2026-10-12",
    "equity": 97283.24,
    "index": 49313.44
+  },
+  {
+   "date": "2026-10-13",
+   "equity": 96504.49,
+   "index": 49301.96
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-12"
+ "last_date": "2026-10-13"
 }

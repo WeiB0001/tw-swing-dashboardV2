@@ -1,5 +1,5 @@
 {
- "cash": 35043.986769999996,
+ "cash": 131.696769999995,
  "positions": [
   {
    "code": "2301",
@@ -7,7 +7,7 @@
    "shares": 113,
    "entry": 282.5,
    "entry_date": "2026-09-30",
-   "held": 8,
+   "held": 9,
    "stop": 271.0,
    "target1": 308.93,
    "pattern": "區間整理"
@@ -18,21 +18,24 @@
    "shares": 151,
    "entry": 194.5,
    "entry_date": "2026-10-05",
-   "held": 5,
+   "held": 6,
    "stop": 178.0,
    "target1": 212.64,
    "pattern": "低檔止跌轉強"
-  }
- ],
- "pending": [
+  },
   {
    "code": "2049",
-   "budget": 35043.99,
+   "name": "上銀",
+   "shares": 105,
+   "entry": 332.0,
+   "entry_date": "2026-10-14",
+   "held": 0,
    "stop": 323.66,
    "target1": 361.72,
    "pattern": "區間整理"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -356,8 +359,13 @@
    "date": "2026-10-13",
    "equity": 96504.49,
    "index": 49301.96
+  },
+  {
+   "date": "2026-10-14",
+   "equity": 93438.7,
+   "index": 48341.31
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-13"
+ "last_date": "2026-10-14"
 }

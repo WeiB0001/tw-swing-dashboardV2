@@ -1,35 +1,31 @@
 {
- "cash": 32062.728269999996,
+ "cash": 62728.64482,
  "positions": [
   {
-   "code": "2464",
-   "name": "盟立",
-   "shares": 151,
-   "entry": 194.5,
-   "entry_date": "2026-10-05",
-   "held": 7,
-   "stop": 178.0,
-   "target1": 212.64,
-   "pattern": "低檔止跌轉強"
-  },
-  {
-   "code": "2049",
-   "name": "上銀",
-   "shares": 105,
-   "entry": 332.0,
-   "entry_date": "2026-10-14",
-   "held": 1,
-   "stop": 323.66,
-   "target1": 361.72,
-   "pattern": "區間整理"
+   "code": "2383",
+   "name": "台光電",
+   "shares": 6,
+   "entry": 5010.0,
+   "entry_date": "2026-10-16",
+   "held": 0,
+   "stop": 5230.28,
+   "target1": 6094.06,
+   "pattern": "多頭回檔"
   }
  ],
  "pending": [
   {
-   "code": "2383",
-   "budget": 32062.73,
-   "stop": 5230.28,
-   "target1": 6094.06,
+   "code": "2838",
+   "budget": 31364.32,
+   "stop": 20.19,
+   "target1": 21.08,
+   "pattern": "低檔止跌轉強"
+  },
+  {
+   "code": "3008",
+   "budget": 31364.32,
+   "stop": 6189.15,
+   "target1": 7460.0,
    "pattern": "多頭回檔"
   }
  ],
@@ -200,6 +196,30 @@
    "net_pct": -0.12,
    "reason": "持有到期",
    "held": 10,
+   "pattern": "區間整理"
+  },
+  {
+   "code": "2464",
+   "name": "盟立",
+   "entry_date": "2026-10-05",
+   "exit_date": "2026-10-16",
+   "entry": 194.5,
+   "exit": 178.0,
+   "net_pct": -8.78,
+   "reason": "停損",
+   "held": 8,
+   "pattern": "低檔止跌轉強"
+  },
+  {
+   "code": "2049",
+   "name": "上銀",
+   "entry_date": "2026-10-14",
+   "exit_date": "2026-10-16",
+   "entry": 332.0,
+   "exit": 323.66,
+   "net_pct": -2.81,
+   "reason": "停損",
+   "held": 2,
    "pattern": "區間整理"
   }
  ],
@@ -378,8 +398,13 @@
    "date": "2026-10-15",
    "equity": 95566.73,
    "index": 48625.83
+  },
+  {
+   "date": "2026-10-16",
+   "equity": 93448.64,
+   "index": 46969.87
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-15"
+ "last_date": "2026-10-16"
 }

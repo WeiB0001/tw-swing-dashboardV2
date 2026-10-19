@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-10-19 08:00",
-    "generated_iso": "2026-10-19T08:00:23+08:00",
+    "generated_at": "2026-10-19 23:16",
+    "generated_iso": "2026-10-19T23:16:48+08:00",
     "trade_date": "2026-10-19",
-    "run_type": "morning",
-    "data_date": "2026-10-16",
+    "run_type": "close",
+    "data_date": "2026-10-19",
     "scanned_count": 163,
     "qualified_count": 163,
     "universe_count": 163,
@@ -28,48 +28,48 @@
     "last_night": [
       {
         "label": "那斯達克",
-        "chg_pct": -2.15,
-        "date": "2026-10-16"
+        "chg_pct": 1.68,
+        "date": "2026-10-19"
       },
       {
         "label": "費城半導體",
-        "chg_pct": -3.83,
-        "date": "2026-10-16"
+        "chg_pct": 3.59,
+        "date": "2026-10-19"
       },
       {
         "label": "S&P 500",
-        "chg_pct": -1.09,
-        "date": "2026-10-16"
+        "chg_pct": 0.85,
+        "date": "2026-10-19"
       },
       {
         "label": "道瓊",
-        "chg_pct": -0.34,
-        "date": "2026-10-16"
+        "chg_pct": 0.19,
+        "date": "2026-10-19"
       }
     ],
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": 0.79
+        "chg_pct": 1.65
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": 0.44
+        "chg_pct": 0.67
       }
     ],
     "forecast": {
       "available": true,
-      "point": 0.64,
-      "low": -0.74,
-      "high": 2.03,
-      "basis": "以那斯達克期貨 +0.79% 代入",
-      "r2": 0.345,
+      "point": 1.19,
+      "low": -0.2,
+      "high": 2.58,
+      "basis": "以那斯達克期貨 +1.65% 代入",
+      "r2": 0.344,
       "samples": 250
     },
     "model": {
       "samples": 250,
-      "r2": 0.345,
-      "beta_nasdaq": 0.349,
+      "r2": 0.344,
+      "beta_nasdaq": 0.342,
       "beta_sox": 0.225,
       "resid_sd": 1.39
     }
@@ -77,200 +77,171 @@
   "signals": {
     "marks": {
       "4906": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 1
       },
       "6278": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 2
       },
       "5880": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 3
       },
       "2886": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 4
       },
       "6209": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 5
       },
       "5876": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 6
       },
       "4904": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 7
       },
       "00713": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 8
       },
       "6269": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 9
       },
       "2347": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 10
       },
       "3167": {
         "badge": "🔥",
-        "label": "連續入榜 4 日",
-        "streak": 4,
-        "rank_delta": 2,
-        "prev_rank": 13
+        "label": "連續入榜 5 日",
+        "streak": 5,
+        "rank_delta": 0,
+        "prev_rank": 11
       },
       "2412": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 12
       },
       "2851": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 13
       },
       "2478": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 14
       },
       "3016": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 15
       },
       "3006": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 16
       },
       "3711": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 17
       },
       "1560": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 18
       }
     },
-    "dropped": [
-      {
-        "symbol": "2887",
-        "prev_rank": 1,
-        "pattern": "區間整理"
-      },
-      {
-        "symbol": "3037",
-        "prev_rank": 2,
-        "pattern": "區間整理"
-      },
-      {
-        "symbol": "2834",
-        "prev_rank": 3,
-        "pattern": "區間整理"
-      },
-      {
-        "symbol": "00985A",
-        "prev_rank": 4,
-        "pattern": "區間整理"
-      },
-      {
-        "symbol": "3090",
-        "prev_rank": 5,
-        "pattern": "區間整理"
-      },
-      {
-        "symbol": "2409",
-        "prev_rank": 6,
-        "pattern": "區間整理"
-      },
-      {
-        "symbol": "00850",
-        "prev_rank": 7,
-        "pattern": "區間整理"
-      },
-      {
-        "symbol": "00891",
-        "prev_rank": 8,
-        "pattern": "區間整理"
-      }
-    ],
-    "new_count": 17,
+    "dropped": [],
+    "new_count": 0,
     "hot_count": 1,
-    "history_days": 36
+    "history_days": 37
   },
   "portfolio": {
     "initial": 100000.0,
-    "equity": 93448.64,
-    "total_return": -6.55,
+    "equity": 93123.5,
+    "total_return": -6.88,
     "benchmark_return": 5.25,
-    "trades": 16,
-    "win_rate": 31.2,
-    "profit_factor": 0.59,
-    "avg_net": -1.32,
-    "mdd": -10.1,
+    "trades": 17,
+    "win_rate": 35.3,
+    "profit_factor": 0.67,
+    "avg_net": -1.0,
+    "mdd": -10.4,
     "positions": [
       {
-        "code": "2383",
-        "name": "台光電",
-        "entry": 5010.0,
+        "code": "3008",
+        "name": "大立光",
+        "entry": 6625.0,
         "held": 0,
-        "stop": 5230.28,
-        "target1": 6094.06
+        "stop": 6189.15,
+        "target1": 7460.0
       }
     ],
     "pending": 2,
     "recent": [
+      {
+        "code": "2383",
+        "name": "台光電",
+        "entry_date": "2026-10-16",
+        "exit_date": "2026-10-19",
+        "entry": 5010.0,
+        "exit": 5230.28,
+        "net_pct": 4.1,
+        "reason": "停損",
+        "held": 1,
+        "pattern": "多頭回檔"
+      },
       {
         "code": "2049",
         "name": "上銀",
@@ -318,21 +289,9 @@
         "reason": "停損",
         "held": 6,
         "pattern": "區間整理"
-      },
-      {
-        "code": "3008",
-        "name": "大立光",
-        "entry_date": "2026-09-22",
-        "exit_date": "2026-10-02",
-        "entry": 6465.0,
-        "exit": 5930.0,
-        "net_pct": -8.58,
-        "reason": "停損",
-        "held": 6,
-        "pattern": "區間整理"
       }
     ],
-    "days": 36
+    "days": 37
   },
   "backtest": {
     "generated_at": "2026-10-18 02:06",
@@ -8732,11 +8691,11 @@
       "regime": "sideways",
       "rank": 3,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 3
       },
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -9002,11 +8961,11 @@
       "regime": "sideways",
       "rank": 8,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 8
       },
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -9514,11 +9473,11 @@
       "regime": "sideways",
       "rank": 4,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 4
       },
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -9785,11 +9744,11 @@
       "regime": "sideways",
       "rank": 12,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 12
       },
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -10049,11 +10008,11 @@
       "regime": "sideways",
       "rank": 7,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 7
       },
       "momentum_score": 50.0,
       "momentum_hits": [
@@ -14062,11 +14021,11 @@
       "regime": "sideways",
       "rank": 10,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 10
       },
       "momentum_score": 25.0,
       "momentum_hits": [
@@ -14314,11 +14273,11 @@
       "regime": "sideways",
       "rank": 16,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 16
       },
       "momentum_score": 25.0,
       "momentum_hits": [
@@ -16584,11 +16543,11 @@
       "regime": "sideways",
       "rank": 9,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 9
       },
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -16867,11 +16826,11 @@
       "regime": "sideways",
       "rank": 5,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 5
       },
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -17138,11 +17097,11 @@
       "regime": "sideways",
       "rank": 6,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 6
       },
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -17403,11 +17362,11 @@
       "regime": "sideways",
       "rank": 1,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 1
       },
       "momentum_score": 38.0,
       "momentum_hits": [
@@ -17673,10 +17632,10 @@
       "rank": 11,
       "mark": {
         "badge": "🔥",
-        "label": "連續入榜 4 日",
-        "streak": 4,
-        "rank_delta": 2,
-        "prev_rank": 13
+        "label": "連續入榜 5 日",
+        "streak": 5,
+        "rank_delta": 0,
+        "prev_rank": 11
       },
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -17949,11 +17908,11 @@
       "regime": "sideways",
       "rank": 2,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 2
       },
       "momentum_score": 25.5,
       "momentum_hits": [
@@ -19462,11 +19421,11 @@
       "regime": "sideways",
       "rank": 14,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 14
       },
       "momentum_score": 13.0,
       "momentum_hits": [
@@ -19964,11 +19923,11 @@
       "regime": "sideways",
       "rank": 17,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 17
       },
       "momentum_score": 0.0,
       "momentum_hits": [
@@ -24447,11 +24406,11 @@
       "regime": "sideways",
       "rank": 13,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 13
       },
       "momentum_score": 1.0,
       "momentum_hits": [
@@ -28185,11 +28144,11 @@
       "regime": "sideways",
       "rank": 18,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 18
       },
       "momentum_score": 0.0,
       "momentum_hits": [],
@@ -28936,11 +28895,11 @@
       "regime": "sideways",
       "rank": 15,
       "mark": {
-        "badge": "🆕",
-        "label": "今日新訊號",
-        "streak": 1,
-        "rank_delta": null,
-        "prev_rank": null
+        "badge": "",
+        "label": "",
+        "streak": 2,
+        "rank_delta": 0,
+        "prev_rank": 15
       },
       "momentum_score": 0.0,
       "momentum_hits": [],

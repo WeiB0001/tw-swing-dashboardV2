@@ -1,31 +1,31 @@
 {
- "cash": 62728.64482,
+ "cash": 67523.50230000001,
  "positions": [
   {
-   "code": "2383",
-   "name": "台光電",
-   "shares": 6,
-   "entry": 5010.0,
-   "entry_date": "2026-10-16",
+   "code": "3008",
+   "name": "大立光",
+   "shares": 4,
+   "entry": 6625.0,
+   "entry_date": "2026-10-19",
    "held": 0,
-   "stop": 5230.28,
-   "target1": 6094.06,
+   "stop": 6189.15,
+   "target1": 7460.0,
    "pattern": "多頭回檔"
   }
  ],
  "pending": [
   {
-   "code": "2838",
-   "budget": 31364.32,
-   "stop": 20.19,
-   "target1": 21.08,
-   "pattern": "低檔止跌轉強"
+   "code": "2851",
+   "budget": 33761.75,
+   "stop": 47.21,
+   "target1": 54.06,
+   "pattern": "多頭回檔"
   },
   {
-   "code": "3008",
-   "budget": 31364.32,
-   "stop": 6189.15,
-   "target1": 7460.0,
+   "code": "2478",
+   "budget": 33761.75,
+   "stop": 124.1,
+   "target1": 157.06,
    "pattern": "多頭回檔"
   }
  ],
@@ -221,6 +221,18 @@
    "reason": "停損",
    "held": 2,
    "pattern": "區間整理"
+  },
+  {
+   "code": "2383",
+   "name": "台光電",
+   "entry_date": "2026-10-16",
+   "exit_date": "2026-10-19",
+   "entry": 5010.0,
+   "exit": 5230.28,
+   "net_pct": 4.1,
+   "reason": "停損",
+   "held": 1,
+   "pattern": "多頭回檔"
   }
  ],
  "equity": [
@@ -403,8 +415,13 @@
    "date": "2026-10-16",
    "equity": 93448.64,
    "index": 46969.87
+  },
+  {
+   "date": "2026-10-19",
+   "equity": 93123.5,
+   "index": 47111.26
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-16"
+ "last_date": "2026-10-19"
 }

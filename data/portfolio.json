@@ -1,31 +1,31 @@
 {
- "cash": 67523.50230000001,
+ "cash": 58445.9478,
  "positions": [
   {
-   "code": "3008",
-   "name": "大立光",
-   "shares": 4,
-   "entry": 6625.0,
-   "entry_date": "2026-10-19",
+   "code": "2851",
+   "name": "中再保",
+   "shares": 688,
+   "entry": 49.05,
+   "entry_date": "2026-10-20",
    "held": 0,
-   "stop": 6189.15,
-   "target1": 7460.0,
+   "stop": 47.21,
+   "target1": 54.06,
    "pattern": "多頭回檔"
   }
  ],
  "pending": [
   {
-   "code": "2851",
-   "budget": 33761.75,
-   "stop": 47.21,
-   "target1": 54.06,
+   "code": "3535",
+   "budget": 29222.97,
+   "stop": 92.1,
+   "target1": 115.26,
    "pattern": "多頭回檔"
   },
   {
-   "code": "2478",
-   "budget": 33761.75,
-   "stop": 124.1,
-   "target1": 157.06,
+   "code": "8039",
+   "budget": 29222.97,
+   "stop": 276.74,
+   "target1": 339.42,
    "pattern": "多頭回檔"
   }
  ],
@@ -233,6 +233,18 @@
    "reason": "停損",
    "held": 1,
    "pattern": "多頭回檔"
+  },
+  {
+   "code": "3008",
+   "name": "大立光",
+   "entry_date": "2026-10-19",
+   "exit_date": "2026-10-20",
+   "entry": 6625.0,
+   "exit": 6189.15,
+   "net_pct": -6.88,
+   "reason": "停損",
+   "held": 1,
+   "pattern": "多頭回檔"
   }
  ],
  "equity": [
@@ -420,8 +432,13 @@
    "date": "2026-10-19",
    "equity": 93123.5,
    "index": 47111.26
+  },
+  {
+   "date": "2026-10-20",
+   "equity": 93602.75,
+   "index": 46822.08
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-19"
+ "last_date": "2026-10-20"
 }

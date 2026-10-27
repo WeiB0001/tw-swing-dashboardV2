@@ -1,5 +1,5 @@
 {
- "cash": 26.09927499999685,
+ "cash": 26553.288715,
  "positions": [
   {
    "code": "2851",
@@ -7,20 +7,9 @@
    "shares": 688,
    "entry": 49.05,
    "entry_date": "2026-10-20",
-   "held": 2,
+   "held": 3,
    "stop": 47.21,
    "target1": 54.06,
-   "pattern": "多頭回檔"
-  },
-  {
-   "code": "8039",
-   "name": "台虹",
-   "shares": 96,
-   "entry": 304.0,
-   "entry_date": "2026-10-21",
-   "held": 1,
-   "stop": 276.74,
-   "target1": 339.42,
    "pattern": "多頭回檔"
   },
   {
@@ -29,13 +18,21 @@
    "shares": 791,
    "entry": 36.85,
    "entry_date": "2026-10-22",
-   "held": 0,
+   "held": 1,
    "stop": 33.67,
    "target1": 40.88,
    "pattern": "弱勢未止跌"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "0053",
+   "budget": 26553.29,
+   "stop": 227.7,
+   "target1": 252.72,
+   "pattern": "弱勢未止跌"
+  }
+ ],
  "trades": [
   {
    "code": "2845",
@@ -252,6 +249,18 @@
    "reason": "停損",
    "held": 1,
    "pattern": "多頭回檔"
+  },
+  {
+   "code": "8039",
+   "name": "台虹",
+   "entry_date": "2026-10-21",
+   "exit_date": "2026-10-27",
+   "entry": 304.0,
+   "exit": 276.74,
+   "net_pct": -9.27,
+   "reason": "停損",
+   "held": 2,
+   "pattern": "多頭回檔"
   }
  ],
  "equity": [
@@ -454,8 +463,13 @@
    "date": "2026-10-22",
    "equity": 92225.25,
    "index": 46887.77
+  },
+  {
+   "date": "2026-10-27",
+   "equity": 89298.69,
+   "index": 46041.43
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-22"
+ "last_date": "2026-10-27"
 }

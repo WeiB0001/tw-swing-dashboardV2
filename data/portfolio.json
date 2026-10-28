@@ -1,5 +1,5 @@
 {
- "cash": 26553.288715,
+ "cash": 26728.74226,
  "positions": [
   {
    "code": "2851",
@@ -7,29 +7,29 @@
    "shares": 688,
    "entry": 49.05,
    "entry_date": "2026-10-20",
-   "held": 3,
+   "held": 4,
    "stop": 47.21,
    "target1": 54.06,
    "pattern": "多頭回檔"
   },
   {
-   "code": "2409",
-   "name": "友達",
-   "shares": 791,
-   "entry": 36.85,
-   "entry_date": "2026-10-22",
-   "held": 1,
-   "stop": 33.67,
-   "target1": 40.88,
+   "code": "0053",
+   "name": "元大科技市值",
+   "shares": 110,
+   "entry": 239.8,
+   "entry_date": "2026-10-28",
+   "held": 0,
+   "stop": 227.7,
+   "target1": 252.72,
    "pattern": "弱勢未止跌"
   }
  ],
  "pending": [
   {
-   "code": "0053",
-   "budget": 26553.29,
-   "stop": 227.7,
-   "target1": 252.72,
+   "code": "6239",
+   "budget": 26728.74,
+   "stop": 240.84,
+   "target1": 283.17,
    "pattern": "弱勢未止跌"
   }
  ],
@@ -261,6 +261,18 @@
    "reason": "停損",
    "held": 2,
    "pattern": "多頭回檔"
+  },
+  {
+   "code": "2409",
+   "name": "友達",
+   "entry_date": "2026-10-22",
+   "exit_date": "2026-10-28",
+   "entry": 36.85,
+   "exit": 33.67,
+   "net_pct": -8.93,
+   "reason": "停損",
+   "held": 2,
+   "pattern": "弱勢未止跌"
   }
  ],
  "equity": [
@@ -468,8 +480,13 @@
    "date": "2026-10-27",
    "equity": 89298.69,
    "index": 46041.43
+  },
+  {
+   "date": "2026-10-28",
+   "equity": 87242.74,
+   "index": 46096.23
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-27"
+ "last_date": "2026-10-28"
 }

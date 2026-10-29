@@ -1,5 +1,5 @@
 {
- "cash": 26728.74226,
+ "cash": 8.22150999999576,
  "positions": [
   {
    "code": "2851",
@@ -7,7 +7,7 @@
    "shares": 688,
    "entry": 49.05,
    "entry_date": "2026-10-20",
-   "held": 4,
+   "held": 5,
    "stop": 47.21,
    "target1": 54.06,
    "pattern": "多頭回檔"
@@ -18,21 +18,24 @@
    "shares": 110,
    "entry": 239.8,
    "entry_date": "2026-10-28",
-   "held": 0,
+   "held": 1,
    "stop": 227.7,
    "target1": 252.72,
    "pattern": "弱勢未止跌"
-  }
- ],
- "pending": [
+  },
   {
    "code": "6239",
-   "budget": 26728.74,
+   "name": "力成",
+   "shares": 99,
+   "entry": 269.5,
+   "entry_date": "2026-10-29",
+   "held": 0,
    "stop": 240.84,
    "target1": 283.17,
    "pattern": "弱勢未止跌"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -485,8 +488,13 @@
    "date": "2026-10-28",
    "equity": 87242.74,
    "index": 46096.23
+  },
+  {
+   "date": "2026-10-29",
+   "equity": 87374.12,
+   "index": 47035.58
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-10-28"
+ "last_date": "2026-10-29"
 }

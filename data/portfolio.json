@@ -1,41 +1,29 @@
 {
- "cash": 8.22150999999576,
- "positions": [
+ "cash": 81256.80555,
+ "positions": [],
+ "pending": [
   {
-   "code": "2851",
-   "name": "中再保",
-   "shares": 688,
-   "entry": 49.05,
-   "entry_date": "2026-10-20",
-   "held": 8,
-   "stop": 47.21,
-   "target1": 54.06,
-   "pattern": "多頭回檔"
-  },
-  {
-   "code": "0053",
-   "name": "元大科技市值",
-   "shares": 110,
-   "entry": 239.8,
-   "entry_date": "2026-10-28",
-   "held": 4,
-   "stop": 227.7,
-   "target1": 252.72,
+   "code": "3443",
+   "budget": 27085.6,
+   "stop": 6223.37,
+   "target1": 8221.02,
    "pattern": "弱勢未止跌"
   },
   {
-   "code": "6239",
-   "name": "力成",
-   "shares": 99,
-   "entry": 269.5,
-   "entry_date": "2026-10-29",
-   "held": 3,
-   "stop": 240.84,
-   "target1": 283.17,
+   "code": "2887",
+   "budget": 27085.6,
+   "stop": 40.11,
+   "target1": 43.5,
+   "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "3533",
+   "budget": 27085.6,
+   "stop": 1638.18,
+   "target1": 1965.07,
    "pattern": "弱勢未止跌"
   }
  ],
- "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -276,6 +264,42 @@
    "reason": "停損",
    "held": 2,
    "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "2851",
+   "name": "中再保",
+   "entry_date": "2026-10-20",
+   "exit_date": "2026-11-04",
+   "entry": 49.05,
+   "exit": 47.21,
+   "net_pct": -4.05,
+   "reason": "停損",
+   "held": 9,
+   "pattern": "多頭回檔"
+  },
+  {
+   "code": "0053",
+   "name": "元大科技市值",
+   "entry_date": "2026-10-28",
+   "exit_date": "2026-11-04",
+   "entry": 239.8,
+   "exit": 227.7,
+   "net_pct": -5.35,
+   "reason": "停損",
+   "held": 5,
+   "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "6239",
+   "name": "力成",
+   "entry_date": "2026-10-29",
+   "exit_date": "2026-11-04",
+   "entry": 269.5,
+   "exit": 240.84,
+   "net_pct": -10.93,
+   "reason": "停損",
+   "held": 4,
+   "pattern": "弱勢未止跌"
   }
  ],
  "equity": [
@@ -508,8 +532,13 @@
    "date": "2026-11-03",
    "equity": 84556.72,
    "index": 43307.5390625
+  },
+  {
+   "date": "2026-11-04",
+   "equity": 81256.81,
+   "index": 43307.54
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-03"
+ "last_date": "2026-11-04"
 }

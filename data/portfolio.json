@@ -1,29 +1,41 @@
 {
- "cash": 81256.80555,
- "positions": [],
- "pending": [
+ "cash": 6168.942450000006,
+ "positions": [
   {
    "code": "3443",
-   "budget": 27085.6,
+   "name": "創意",
+   "shares": 3,
+   "entry": 7000.0,
+   "entry_date": "2026-11-05",
+   "held": 0,
    "stop": 6223.37,
    "target1": 8221.02,
    "pattern": "弱勢未止跌"
   },
   {
    "code": "2887",
-   "budget": 27085.6,
+   "name": "台新新光金",
+   "shares": 663,
+   "entry": 40.8,
+   "entry_date": "2026-11-05",
+   "held": 0,
    "stop": 40.11,
    "target1": 43.5,
    "pattern": "弱勢未止跌"
   },
   {
    "code": "3533",
-   "budget": 27085.6,
+   "name": "嘉澤",
+   "shares": 15,
+   "entry": 1795.0,
+   "entry_date": "2026-11-05",
+   "held": 0,
    "stop": 1638.18,
    "target1": 1965.07,
    "pattern": "弱勢未止跌"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -537,8 +549,13 @@
    "date": "2026-11-04",
    "equity": 81256.81,
    "index": 43307.54
+  },
+  {
+   "date": "2026-11-05",
+   "equity": 81499.69,
+   "index": 42948.91
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-04"
+ "last_date": "2026-11-05"
 }

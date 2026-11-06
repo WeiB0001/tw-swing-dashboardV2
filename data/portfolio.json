@@ -1,5 +1,5 @@
 {
- "cash": 6168.942450000006,
+ "cash": 32721.983055000008,
  "positions": [
   {
    "code": "3443",
@@ -7,20 +7,9 @@
    "shares": 3,
    "entry": 7000.0,
    "entry_date": "2026-11-05",
-   "held": 0,
+   "held": 1,
    "stop": 6223.37,
    "target1": 8221.02,
-   "pattern": "弱勢未止跌"
-  },
-  {
-   "code": "2887",
-   "name": "台新新光金",
-   "shares": 663,
-   "entry": 40.8,
-   "entry_date": "2026-11-05",
-   "held": 0,
-   "stop": 40.11,
-   "target1": 43.5,
    "pattern": "弱勢未止跌"
   },
   {
@@ -29,13 +18,21 @@
    "shares": 15,
    "entry": 1795.0,
    "entry_date": "2026-11-05",
-   "held": 0,
+   "held": 1,
    "stop": 1638.18,
    "target1": 1965.07,
    "pattern": "弱勢未止跌"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "2451",
+   "budget": 32721.98,
+   "stop": 242.61,
+   "target1": 287.43,
+   "pattern": "弱勢未止跌"
+  }
+ ],
  "trades": [
   {
    "code": "2845",
@@ -312,6 +309,18 @@
    "reason": "停損",
    "held": 4,
    "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "2887",
+   "name": "台新新光金",
+   "entry_date": "2026-11-05",
+   "exit_date": "2026-11-06",
+   "entry": 40.8,
+   "exit": 40.11,
+   "net_pct": -1.99,
+   "reason": "停損",
+   "held": 1,
+   "pattern": "弱勢未止跌"
   }
  ],
  "equity": [
@@ -554,8 +563,13 @@
    "date": "2026-11-05",
    "equity": 81499.69,
    "index": 42948.91
+  },
+  {
+   "date": "2026-11-06",
+   "equity": 76836.98,
+   "index": 41574.72
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-05"
+ "last_date": "2026-11-06"
 }

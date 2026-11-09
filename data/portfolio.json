@@ -1,35 +1,31 @@
 {
- "cash": 32721.983055000008,
+ "cash": 43262.04534000001,
  "positions": [
   {
-   "code": "3443",
-   "name": "創意",
-   "shares": 3,
-   "entry": 7000.0,
-   "entry_date": "2026-11-05",
-   "held": 1,
-   "stop": 6223.37,
-   "target1": 8221.02,
-   "pattern": "弱勢未止跌"
-  },
-  {
-   "code": "3533",
-   "name": "嘉澤",
-   "shares": 15,
-   "entry": 1795.0,
-   "entry_date": "2026-11-05",
-   "held": 1,
-   "stop": 1638.18,
-   "target1": 1965.07,
+   "code": "2451",
+   "name": "創見",
+   "shares": 142,
+   "entry": 229.5,
+   "entry_date": "2026-11-09",
+   "held": 0,
+   "stop": 242.61,
+   "target1": 287.43,
    "pattern": "弱勢未止跌"
   }
  ],
  "pending": [
   {
-   "code": "2451",
-   "budget": 32721.98,
-   "stop": 242.61,
-   "target1": 287.43,
+   "code": "2881",
+   "budget": 21631.02,
+   "stop": 138.48,
+   "target1": 160.4,
+   "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "2883",
+   "budget": 21631.02,
+   "stop": 30.73,
+   "target1": 36.44,
    "pattern": "弱勢未止跌"
   }
  ],
@@ -321,6 +317,30 @@
    "reason": "停損",
    "held": 1,
    "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "3443",
+   "name": "創意",
+   "entry_date": "2026-11-05",
+   "exit_date": "2026-11-09",
+   "entry": 7000.0,
+   "exit": 6223.37,
+   "net_pct": -11.39,
+   "reason": "停損",
+   "held": 2,
+   "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "3533",
+   "name": "嘉澤",
+   "entry_date": "2026-11-05",
+   "exit_date": "2026-11-09",
+   "entry": 1795.0,
+   "exit": 1638.18,
+   "net_pct": -9.04,
+   "reason": "停損",
+   "held": 2,
+   "pattern": "弱勢未止跌"
   }
  ],
  "equity": [
@@ -568,8 +588,13 @@
    "date": "2026-11-06",
    "equity": 76836.98,
    "index": 41574.72
+  },
+  {
+   "date": "2026-11-09",
+   "equity": 78336.05,
+   "index": 39701.64
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-06"
+ "last_date": "2026-11-09"
 }

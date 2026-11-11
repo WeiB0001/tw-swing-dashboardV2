@@ -1,5 +1,5 @@
 {
- "cash": 34420.02511000002,
+ "cash": 96.61711000001378,
  "positions": [
   {
    "code": "2881",
@@ -7,7 +7,7 @@
    "shares": 145,
    "entry": 149.0,
    "entry_date": "2026-11-10",
-   "held": 0,
+   "held": 1,
    "stop": 138.48,
    "target1": 160.4,
    "pattern": "弱勢未止跌"
@@ -18,21 +18,24 @@
    "shares": 642,
    "entry": 33.6,
    "entry_date": "2026-11-10",
-   "held": 0,
+   "held": 1,
    "stop": 30.73,
    "target1": 36.44,
    "pattern": "弱勢未止跌"
-  }
- ],
- "pending": [
+  },
   {
    "code": "6278",
-   "budget": 34420.03,
+   "name": "台表科",
+   "shares": 168,
+   "entry": 204.0,
+   "entry_date": "2026-11-11",
+   "held": 0,
    "stop": 178.32,
    "target1": 229.78,
    "pattern": "弱勢未止跌"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -614,8 +617,13 @@
    "date": "2026-11-10",
    "equity": 78858.63,
    "index": 41661.7
+  },
+  {
+   "date": "2026-11-11",
+   "equity": 81504.02,
+   "index": 42711.92
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-10"
+ "last_date": "2026-11-11"
 }

@@ -1,5 +1,5 @@
 {
- "cash": 96.61711000001378,
+ "cash": 38641.75255000002,
  "positions": [
   {
    "code": "2881",
@@ -7,7 +7,7 @@
    "shares": 145,
    "entry": 149.0,
    "entry_date": "2026-11-10",
-   "held": 1,
+   "held": 2,
    "stop": 138.48,
    "target1": 160.4,
    "pattern": "弱勢未止跌"
@@ -18,24 +18,21 @@
    "shares": 642,
    "entry": 33.6,
    "entry_date": "2026-11-10",
-   "held": 1,
+   "held": 2,
    "stop": 30.73,
    "target1": 36.44,
    "pattern": "弱勢未止跌"
-  },
+  }
+ ],
+ "pending": [
   {
-   "code": "6278",
-   "name": "台表科",
-   "shares": 168,
-   "entry": 204.0,
-   "entry_date": "2026-11-11",
-   "held": 0,
-   "stop": 178.32,
-   "target1": 229.78,
+   "code": "6414",
+   "budget": 38641.75,
+   "stop": 309.0,
+   "target1": 360.14,
    "pattern": "弱勢未止跌"
   }
  ],
- "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -360,6 +357,18 @@
    "reason": "停損",
    "held": 1,
    "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "6278",
+   "name": "台表科",
+   "entry_date": "2026-11-11",
+   "exit_date": "2026-11-12",
+   "entry": 204.0,
+   "exit": 229.78,
+   "net_pct": 12.34,
+   "reason": "達標",
+   "held": 1,
+   "pattern": "弱勢未止跌"
   }
  ],
  "equity": [
@@ -622,8 +631,13 @@
    "date": "2026-11-11",
    "equity": 81504.02,
    "index": 42711.92
+  },
+  {
+   "date": "2026-11-12",
+   "equity": 84817.05,
+   "index": 44257.15
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-11"
+ "last_date": "2026-11-12"
 }

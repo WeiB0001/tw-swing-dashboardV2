@@ -1,35 +1,35 @@
 {
- "cash": 38641.75255000002,
+ "cash": 23401.256550000016,
  "positions": [
-  {
-   "code": "2881",
-   "name": "富邦金",
-   "shares": 145,
-   "entry": 149.0,
-   "entry_date": "2026-11-10",
-   "held": 2,
-   "stop": 138.48,
-   "target1": 160.4,
-   "pattern": "弱勢未止跌"
-  },
   {
    "code": "2883",
    "name": "凱基金",
    "shares": 642,
    "entry": 33.6,
    "entry_date": "2026-11-10",
-   "held": 2,
+   "held": 3,
    "stop": 30.73,
    "target1": 36.44,
+   "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "6414",
+   "name": "樺漢",
+   "shares": 111,
+   "entry": 346.0,
+   "entry_date": "2026-11-13",
+   "held": 0,
+   "stop": 309.0,
+   "target1": 360.14,
    "pattern": "弱勢未止跌"
   }
  ],
  "pending": [
   {
-   "code": "6414",
-   "budget": 38641.75,
-   "stop": 309.0,
-   "target1": 360.14,
+   "code": "2327",
+   "budget": 23401.26,
+   "stop": 364.5,
+   "target1": 497.46,
    "pattern": "弱勢未止跌"
   }
  ],
@@ -369,6 +369,18 @@
    "reason": "達標",
    "held": 1,
    "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "2881",
+   "name": "富邦金",
+   "entry_date": "2026-11-10",
+   "exit_date": "2026-11-13",
+   "entry": 149.0,
+   "exit": 160.4,
+   "net_pct": 7.35,
+   "reason": "達標",
+   "held": 3,
+   "pattern": "弱勢未止跌"
   }
  ],
  "equity": [
@@ -636,8 +648,13 @@
    "date": "2026-11-12",
    "equity": 84817.05,
    "index": 44257.15
+  },
+  {
+   "date": "2026-11-13",
+   "equity": 82503.96,
+   "index": 43091.87
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-12"
+ "last_date": "2026-11-13"
 }

@@ -1,5 +1,5 @@
 {
- "cash": 29.656350000012026,
+ "cash": 22841.587050000013,
  "positions": [
   {
    "code": "2883",
@@ -7,21 +7,10 @@
    "shares": 642,
    "entry": 33.6,
    "entry_date": "2026-11-10",
-   "held": 7,
+   "held": 8,
    "stop": 30.73,
    "target1": 36.44,
    "pattern": "弱勢未止跌"
-  },
-  {
-   "code": "6456",
-   "name": "GIS-KY",
-   "shares": 303,
-   "entry": 89.7,
-   "entry_date": "2026-11-19",
-   "held": 0,
-   "stop": 75.4,
-   "target1": 104.2,
-   "pattern": "區間整理"
   },
   {
    "code": "2801",
@@ -29,13 +18,21 @@
    "shares": 966,
    "entry": 28.2,
    "entry_date": "2026-11-19",
-   "held": 0,
+   "held": 1,
    "stop": 26.4,
    "target1": 30.02,
    "pattern": "區間整理"
   }
  ],
- "pending": [],
+ "pending": [
+  {
+   "code": "3715",
+   "budget": 22841.59,
+   "stop": 113.78,
+   "target1": 150.5,
+   "pattern": "區間整理"
+  }
+ ],
  "trades": [
   {
    "code": "2845",
@@ -408,6 +405,18 @@
    "reason": "停損",
    "held": 2,
    "pattern": "弱勢未止跌"
+  },
+  {
+   "code": "6456",
+   "name": "GIS-KY",
+   "entry_date": "2026-11-19",
+   "exit_date": "2026-11-20",
+   "entry": 89.7,
+   "exit": 75.4,
+   "net_pct": -16.24,
+   "reason": "停損",
+   "held": 1,
+   "pattern": "區間整理"
   }
  ],
  "equity": [
@@ -700,8 +709,13 @@
    "date": "2026-11-19",
    "equity": 73610.96,
    "index": 40194.91
+  },
+  {
+   "date": "2026-11-20",
+   "equity": 69274.69,
+   "index": 38426.89
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-19"
+ "last_date": "2026-11-20"
 }

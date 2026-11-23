@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-11-22 05:25",
-    "generated_iso": "2026-11-22T05:25:08+08:00",
-    "trade_date": "2026-11-22",
+    "generated_at": "2026-11-23 10:24",
+    "generated_iso": "2026-11-23T10:24:03+08:00",
+    "trade_date": "2026-11-23",
     "run_type": "morning",
     "data_date": "2026-11-20",
     "scanned_count": 150,
@@ -50,19 +50,19 @@
     "futures": [
       {
         "label": "那斯達克期貨",
-        "chg_pct": -5.54
+        "chg_pct": 2.62
       },
       {
         "label": "S&P 500 期貨",
-        "chg_pct": -3.64
+        "chg_pct": 2.01
       }
     ],
     "forecast": {
       "available": true,
-      "point": -3.5,
-      "low": -5.08,
-      "high": -1.92,
-      "basis": "以那斯達克期貨 -5.54% 代入",
+      "point": 1.71,
+      "low": 0.13,
+      "high": 3.29,
+      "basis": "以那斯達克期貨 +2.62% 代入",
       "r2": 0.334,
       "samples": 250
     },

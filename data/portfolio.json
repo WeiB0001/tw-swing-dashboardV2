@@ -1,29 +1,41 @@
 {
- "cash": 68004.80046000001,
- "positions": [],
- "pending": [
+ "cash": 2919.4987300000103,
+ "positions": [
   {
    "code": "3045",
-   "budget": 22668.27,
+   "name": "台灣大",
+   "shares": 182,
+   "entry": 124.0,
+   "entry_date": "2026-11-24",
+   "held": 0,
    "stop": 119.38,
    "target1": 132.61,
    "pattern": "弱勢未止跌"
   },
   {
    "code": "3443",
-   "budget": 22668.27,
+   "name": "創意",
+   "shares": 4,
+   "entry": 4945.0,
+   "entry_date": "2026-11-24",
+   "held": 0,
    "stop": 4777.12,
    "target1": 6365.46,
    "pattern": "弱勢未止跌"
   },
   {
    "code": "0055",
-   "budget": 22668.27,
+   "name": "元大MSCI金融",
+   "shares": 553,
+   "entry": 40.94,
+   "entry_date": "2026-11-24",
+   "held": 0,
    "stop": 39.59,
    "target1": 47.42,
    "pattern": "弱勢未止跌"
   }
  ],
+ "pending": [],
  "trades": [
   {
    "code": "2845",
@@ -734,8 +746,13 @@
    "date": "2026-11-23",
    "equity": 68004.8,
    "index": 36033.29
+  },
+  {
+   "date": "2026-11-24",
+   "equity": 68292.6,
+   "index": 36811.89
   }
  ],
  "start_index": 44762.32,
- "last_date": "2026-11-23"
+ "last_date": "2026-11-24"
 }

@@ -1,174 +1,6 @@
 {
  "days": [
   {
-   "date": "2026-09-24",
-   "regime": "bull",
-   "entries": [
-    {
-     "symbol": "3008",
-     "date": "2026-09-24",
-     "rank": 1,
-     "ref_price": 6245.0,
-     "score": 59.6,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2301",
-     "date": "2026-09-24",
-     "rank": 2,
-     "ref_price": 287.0,
-     "score": 58.4,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2421",
-     "date": "2026-09-24",
-     "rank": 3,
-     "ref_price": 167.0,
-     "score": 57.4,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2484",
-     "date": "2026-09-24",
-     "rank": 4,
-     "ref_price": 72.8,
-     "score": 56.9,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "6285",
-     "date": "2026-09-24",
-     "rank": 5,
-     "ref_price": 238.0,
-     "score": 56.7,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2059",
-     "date": "2026-09-24",
-     "rank": 6,
-     "ref_price": 12350.0,
-     "score": 56.0,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2313",
-     "date": "2026-09-24",
-     "rank": 7,
-     "ref_price": 222.5,
-     "score": 55.8,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2377",
-     "date": "2026-09-24",
-     "rank": 8,
-     "ref_price": 151.5,
-     "score": 55.4,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "3006",
-     "date": "2026-09-24",
-     "rank": 9,
-     "ref_price": 275.0,
-     "score": 55.2,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "3231",
-     "date": "2026-09-24",
-     "rank": 10,
-     "ref_price": 184.5,
-     "score": 54.6,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2426",
-     "date": "2026-09-24",
-     "rank": 11,
-     "ref_price": 96.9,
-     "score": 54.3,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2357",
-     "date": "2026-09-24",
-     "rank": 12,
-     "ref_price": 953.0,
-     "score": 54.2,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2345",
-     "date": "2026-09-24",
-     "rank": 13,
-     "ref_price": 1895.0,
-     "score": 53.3,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "2886",
-     "date": "2026-09-24",
-     "rank": 14,
-     "ref_price": 49.6,
-     "score": 53.1,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "00929",
-     "date": "2026-09-24",
-     "rank": 15,
-     "ref_price": 29.18,
-     "score": 52.2,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "3583",
-     "date": "2026-09-24",
-     "rank": 16,
-     "ref_price": 698.0,
-     "score": 52.1,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "8112",
-     "date": "2026-09-24",
-     "rank": 17,
-     "ref_price": 83.5,
-     "score": 51.0,
-     "pattern": "區間整理",
-     "regime": "bull"
-    },
-    {
-     "symbol": "6414",
-     "date": "2026-09-24",
-     "rank": 18,
-     "ref_price": 374.0,
-     "score": 50.6,
-     "pattern": "區間整理",
-     "regime": "bull"
-    }
-   ]
-  },
-  {
    "date": "2026-09-29",
    "regime": "bull",
    "entries": [
@@ -6715,6 +6547,174 @@
      "rank": 18,
      "ref_price": 328.5,
      "score": 42.3,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    }
+   ]
+  },
+  {
+   "date": "2026-11-26",
+   "regime": "bear",
+   "entries": [
+    {
+     "symbol": "3481",
+     "date": "2026-11-26",
+     "rank": 1,
+     "ref_price": 30.55,
+     "score": 44.8,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2880",
+     "date": "2026-11-26",
+     "rank": 2,
+     "ref_price": 42.75,
+     "score": 44.7,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2455",
+     "date": "2026-11-26",
+     "rank": 3,
+     "ref_price": 282.5,
+     "score": 44.7,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2367",
+     "date": "2026-11-26",
+     "rank": 4,
+     "ref_price": 30.9,
+     "score": 44.6,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "6278",
+     "date": "2026-11-26",
+     "rank": 5,
+     "ref_price": 160.0,
+     "score": 44.4,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "6213",
+     "date": "2026-11-26",
+     "rank": 6,
+     "ref_price": 390.0,
+     "score": 44.2,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "00892",
+     "date": "2026-11-26",
+     "rank": 7,
+     "ref_price": 26.5,
+     "score": 44.1,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "6531",
+     "date": "2026-11-26",
+     "rank": 8,
+     "ref_price": 516.0,
+     "score": 44.1,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "6176",
+     "date": "2026-11-26",
+     "rank": 9,
+     "ref_price": 73.6,
+     "score": 44.1,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2360",
+     "date": "2026-11-26",
+     "rank": 10,
+     "ref_price": 1010.0,
+     "score": 44.0,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "7769",
+     "date": "2026-11-26",
+     "rank": 11,
+     "ref_price": 3065.0,
+     "score": 43.8,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "3036",
+     "date": "2026-11-26",
+     "rank": 12,
+     "ref_price": 159.0,
+     "score": 43.8,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "3037",
+     "date": "2026-11-26",
+     "rank": 13,
+     "ref_price": 585.0,
+     "score": 43.7,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2458",
+     "date": "2026-11-26",
+     "rank": 14,
+     "ref_price": 103.5,
+     "score": 43.5,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2356",
+     "date": "2026-11-26",
+     "rank": 15,
+     "ref_price": 39.3,
+     "score": 43.3,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "3189",
+     "date": "2026-11-26",
+     "rank": 16,
+     "ref_price": 495.0,
+     "score": 43.3,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2327",
+     "date": "2026-11-26",
+     "rank": 17,
+     "ref_price": 309.0,
+     "score": 43.2,
+     "pattern": "弱勢未止跌",
+     "regime": "bear"
+    },
+    {
+     "symbol": "2408",
+     "date": "2026-11-26",
+     "rank": 18,
+     "ref_price": 278.5,
+     "score": 43.2,
      "pattern": "弱勢未止跌",
      "regime": "bear"
     }
